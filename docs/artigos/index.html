@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Artigos | Sady Santana</title>
+  <meta name="description" content="Artigos e reflexões de Sady Santana sobre fé cristã, feminilidade bíblica, família e cultura.">
+  <link rel="canonical" href="https://eliabe-oliveira.github.io/sady-santana-escritora-site/artigos/">
+  <meta property="og:title" content="Artigos | Sady Santana"><meta property="og:description" content="Reflexões para viver e discernir o tempo à luz das Escrituras."><meta property="og:type" content="website">
+  <style>@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap");
+
+:root {
+  --ivory: #f7f3eb;
+  --paper: #fcfaf5;
+  --rose: #b57579;
+  --rose-soft: #e5c6c2;
+  --burgundy: #4b2028;
+  --wine: #32161d;
+  --sage: #6e7964;
+  --ink: #292421;
+  --muted: #776d68;
+  --line: rgba(75, 32, 40, 0.18);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: "DM Sans", sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M4 2.7v19.2l5.2-5.1 3.7 8.1 3.6-1.7-3.7-7.8h7.4z' fill='%23d49a9e' stroke='%234b2028' stroke-width='1.35' stroke-linejoin='round'/%3E%3C/svg%3E") 4 3, auto;
+}
+a { color: inherit; text-decoration: none; }
+button, input { font: inherit; }
+button { color: inherit; }
+
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: -100px;
+  left: 20px;
+  padding: 12px 18px;
+  background: var(--burgundy);
+  color: white;
+}
+.skip-link:focus { top: 12px; }
+
+.site-header {
+  height: 92px;
+  padding: 0 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(247, 243, 235, 0.94);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(14px);
+}
+.brand { display: flex; align-items: center; gap: 13px; }
+.brand span:last-child { display: grid; line-height: 1; }
+.brand strong {
+  font-family: "Playfair Display", serif;
+  font-size: 21px;
+  font-weight: 600;
+}
+.brand small {
+  margin-top: 6px;
+  color: var(--rose);
+  text-transform: uppercase;
+  font-size: 8px;
+  letter-spacing: .32em;
+}
+.leaf-mark { width: 31px; height: 41px; display: inline-block; position: relative; flex: 0 0 auto; }
+.leaf-mark b {
+  display: block; position: absolute; left: 15px; bottom: 2px; height: 37px;
+  border-left: 1px solid var(--burgundy); transform: rotate(9deg);
+}
+.leaf-mark i {
+  position: absolute; width: 12px; height: 7px; border: 1px solid var(--burgundy);
+  border-radius: 100% 0 100% 0; transform: rotate(-25deg);
+}
+.leaf-mark i:nth-child(1) { top: 2px; left: 11px; }
+.leaf-mark i:nth-child(2) { top: 13px; left: 3px; transform: rotate(10deg); }
+.leaf-mark i:nth-child(3) { top: 20px; left: 17px; }
+.leaf-mark i:nth-child(4) { top: 30px; left: 6px; transform: rotate(10deg); }
+.leaf-mark.light b, .leaf-mark.light i { border-color: var(--rose-soft); }
+
+nav { display: flex; align-items: center; gap: 40px; font-size: 12px; text-transform: uppercase; letter-spacing: .13em; }
+nav > a { transition: color .25s; }
+nav > a:hover { color: var(--rose); }
+.nav-cta {
+  border: 1px solid var(--burgundy);
+  padding: 13px 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 25px;
+}
+.nav-cta:hover { background: var(--burgundy); color: white; }
+.menu-button { display: none; background: none; border: 0; }
+
+.hero {
+  min-height: calc(100vh - 92px);
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -3; }
+.hero-shade {
+  position: absolute; inset: 0; z-index: -2;
+  background: linear-gradient(90deg, rgba(247,243,235,.98) 0%, rgba(247,243,235,.9) 33%, rgba(247,243,235,.22) 66%, rgba(247,243,235,.05) 100%);
+}
+.hero::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; opacity: .16;
+  background-image: radial-gradient(#4b2028 0.4px, transparent 0.4px);
+  background-size: 5px 5px; pointer-events: none;
+}
+.hero-content { width: 58%; padding: 8vh 8vw 10vh 10vw; }
+.kicker {
+  color: var(--rose); font-size: 11px; text-transform: uppercase; letter-spacing: .24em; font-weight: 600;
+}
+.hero h1, h2, h3 { font-family: "Playfair Display", serif; font-weight: 500; }
+.hero h1 { margin: 24px 0 28px; font-size: clamp(54px, 6.7vw, 112px); line-height: .94; letter-spacing: -.045em; }
+.hero h1 em { display: block; color: var(--rose); font-weight: 500; }
+.hero-copy { max-width: 560px; font-family: "Playfair Display", serif; font-size: 19px; line-height: 1.7; color: #544b47; }
+.hero-actions { display: flex; align-items: center; gap: 38px; margin-top: 42px; }
+.button {
+  padding: 16px 21px; display: inline-flex; justify-content: space-between; align-items: center;
+  min-width: 210px; text-transform: uppercase; letter-spacing: .13em; font-size: 10px; font-weight: 600;
+  transition: transform .25s, background .25s;
+}
+.button:hover { transform: translateY(-2px); }
+.button.primary { background: var(--burgundy); color: white; }
+.button.dark { background: var(--wine); color: white; }
+.text-link { font-size: 11px; text-transform: uppercase; letter-spacing: .15em; border-bottom: 1px solid var(--ink); padding-bottom: 7px; }
+.hero-note {
+  position: absolute; right: 4vw; bottom: 4vh; width: 210px; padding: 22px;
+  color: white; background: rgba(75,32,40,.88); display: flex; gap: 16px; align-items: center;
+}
+.hero-note p { margin: 0; font-family: "Playfair Display", serif; line-height: 1.45; }
+.hero-note span { display: block; font-family: "DM Sans"; text-transform: uppercase; letter-spacing: .15em; font-size: 8px; color: var(--rose-soft); margin-bottom: 7px; }
+
+.section-index { margin: 0; text-transform: uppercase; letter-spacing: .22em; font-size: 9px; color: var(--rose); font-weight: 600; }
+.manifesto { text-align: center; padding: 120px 5vw; border-bottom: 1px solid var(--line); }
+.manifesto blockquote {
+  max-width: 900px; margin: 40px auto 18px; font: 500 clamp(32px, 4vw, 64px)/1.15 "Playfair Display", serif; letter-spacing: -.025em;
+}
+.manifesto blockquote em { color: var(--rose); }
+.quote-source { color: var(--muted); font: italic 14px "Playfair Display", serif; }
+
+.about { display: grid; grid-template-columns: 27% 73%; max-width: 1280px; margin: auto; padding: 135px 5vw; }
+.about-aside { border-right: 1px solid var(--line); padding-right: 55px; display: flex; flex-direction: column; gap: 34px; }
+.about-aside > span { text-transform: uppercase; letter-spacing: .18em; font-size: 10px; color: var(--rose); }
+.about-aside p { margin-top: auto; font: italic 18px/1.6 "Playfair Display", serif; color: var(--sage); }
+.about-copy { padding-left: 8vw; }
+.about h2 { max-width: 760px; font-size: clamp(38px, 4.7vw, 70px); line-height: 1.09; margin: 20px 0 50px; letter-spacing: -.035em; }
+.columns { display: grid; grid-template-columns: 1fr 1fr; gap: 55px; color: #605752; line-height: 1.9; font-size: 15px; }
+.columns p { margin: 0; }
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 60px; border-top: 1px solid var(--line); }
+.facts div { padding: 27px 20px 0 0; display: grid; gap: 8px; }
+.facts strong { font: 500 28px "Playfair Display", serif; color: var(--burgundy); }
+.facts span { font-size: 10px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+
+.books { padding: 125px 8vw; background: #eee8df; }
+.section-heading { display: flex; justify-content: space-between; align-items: flex-end; max-width: 1280px; margin: auto; }
+.section-heading h2 { margin: 22px 0 0; font-size: clamp(40px, 5vw, 72px); line-height: 1.06; letter-spacing: -.035em; }
+.section-heading > p { max-width: 360px; color: var(--muted); line-height: 1.8; font-size: 14px; }
+.book-selector { max-width: 1280px; margin: 65px auto 35px; display: flex; border-bottom: 1px solid var(--line); }
+.book-selector button {
+  border: 0; background: none; padding: 20px 35px 20px 0; margin-right: 35px;
+  font: 500 17px "Playfair Display", serif; cursor: pointer; color: var(--muted); position: relative;
+}
+.book-selector button span { font: 500 8px "DM Sans"; margin-right: 10px; color: var(--rose); }
+.book-selector button[aria-selected="true"] { color: var(--burgundy); }
+.book-selector button[aria-selected="true"]::after { content: ""; position: absolute; left: 0; right: 35px; bottom: -1px; height: 2px; background: var(--burgundy); }
+.book-card { max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: 42% 58%; align-items: center; min-height: 590px; }
+.book-art {
+  width: 325px; height: 500px; margin: auto; padding: 0; background: transparent;
+  display: block; box-shadow: 24px 24px 45px rgba(49,29,28,.18);
+  transform: rotate(-2deg); position: relative; overflow: hidden;
+}
+.book-art::before { display: none; }
+.book-art.feminilidade { background: transparent; transform: rotate(1.5deg); }
+.book-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.book-label, .book-publisher { text-transform: uppercase; letter-spacing: .22em; font-size: 8px; z-index: 1; }
+.book-art div { display: grid; gap: 20px; z-index: 1; }
+.book-art i { display: block; width: 45px; border-top: 1px solid currentColor; }
+.book-art strong { font: 500 42px/1.05 "Playfair Display", serif; }
+.book-art small { font: italic 14px/1.4 "Playfair Display", serif; }
+.book-info { padding: 65px 7vw; background: var(--paper); min-height: 470px; display: flex; flex-direction: column; justify-content: center; }
+.book-info h3 { font-size: clamp(36px, 4vw, 58px); margin: 15px 0; line-height: 1.05; }
+.book-info .subtitle { margin: -5px 0 20px; font: italic 18px "Playfair Display", serif; color: var(--sage); }
+.book-info > p:not(.kicker):not(.subtitle) { color: var(--muted); line-height: 1.8; max-width: 590px; }
+.book-info ul { list-style: none; padding: 17px 0; display: flex; gap: 10px; flex-wrap: wrap; }
+.book-info li { padding: 7px 12px; border: 1px solid var(--line); font-size: 9px; text-transform: uppercase; letter-spacing: .1em; }
+.book-info .button { margin-top: 10px; }
+
+.talks { background: var(--wine); color: #f7f0e6; padding: 125px 8vw; position: relative; overflow: hidden; }
+.talks::before { content: ""; position: absolute; width: 650px; height: 650px; border: 1px solid rgba(229,198,194,.11); border-radius: 50%; right: -280px; top: 30px; box-shadow: 0 0 0 80px rgba(229,198,194,.025), 0 0 0 160px rgba(229,198,194,.02); }
+.section-heading.light > p { color: #baaead; }
+.theme-list { max-width: 1280px; margin: 70px auto 0; border-top: 1px solid rgba(255,255,255,.17); }
+.theme { display: grid; grid-template-columns: 75px 1fr 300px; align-items: center; gap: 20px; padding: 32px 0; border-bottom: 1px solid rgba(255,255,255,.17); }
+.theme > span { color: var(--rose-soft); font-size: 10px; }
+.theme h3 { margin: 0 0 8px; font-size: 25px; }
+.theme p { margin: 0; color: #bbaeb0; font-size: 13px; }
+.theme small { justify-self: end; font: italic 13px "Playfair Display", serif; color: var(--rose-soft); }
+.video-note { max-width: 1280px; margin: 70px auto 0; padding: 38px 45px; background: rgba(255,255,255,.055); display: flex; gap: 35px; align-items: center; border-left: 2px solid var(--rose); }
+.play-icon { width: 64px; height: 64px; border: 1px solid var(--rose-soft); border-radius: 50%; display: grid; place-items: center; color: var(--rose-soft); flex: 0 0 auto; padding-left: 4px; }
+.video-note h3 { margin: 8px 0; font-size: 28px; }
+.video-note p:last-child { color: #bbaeb0; line-height: 1.7; margin: 0; }
+
+.writings { padding: 125px 8vw; }
+.article-grid { max-width: 1280px; margin: 65px auto 0; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.article-card { min-height: 360px; border: 1px solid var(--line); padding: 45px; display: flex; flex-direction: column; transition: transform .3s, background .3s; }
+.article-card:hover { transform: translateY(-5px); background: white; }
+.article-card.featured { background: #e2d6cb; border-color: transparent; }
+.article-card > span { text-transform: uppercase; letter-spacing: .18em; font-size: 9px; color: var(--rose); }
+.article-card h3 { font-size: 34px; line-height: 1.2; max-width: 480px; margin: 35px 0 20px; }
+.article-card p { color: var(--muted); line-height: 1.7; max-width: 500px; }
+.article-card b { margin-top: auto; font-size: 10px; text-transform: uppercase; letter-spacing: .13em; display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 18px; }
+
+.newsletter { background: var(--burgundy); color: white; padding: 90px 10vw; display: grid; grid-template-columns: 70px 1fr 1fr; gap: 55px; align-items: center; }
+.newsletter h2 { font-size: clamp(40px, 4vw, 63px); line-height: 1.04; margin: 18px 0; }
+.newsletter-copy > p:last-child { color: #c9b6b7; line-height: 1.6; max-width: 430px; font-size: 13px; }
+.subscribe-form { max-width: 520px; justify-self: end; width: 100%; }
+.subscribe-form label { text-transform: uppercase; letter-spacing: .15em; color: var(--rose-soft); font-size: 9px; }
+.subscribe-form input { width: 100%; background: transparent; border: 0; color: white; padding: 17px 0; outline: none; }
+.subscribe-form > input:not([type="checkbox"]):not(.honeypot) { border-bottom: 1px solid rgba(255,255,255,.45); margin: 7px 0 16px; }
+.subscribe-form input::placeholder { color: #9d8588; }
+.subscribe-form small { display: block; margin-top: 13px; color: #9d8588; font-size: 9px; }
+.subscribe-form .consent { display: flex; align-items: flex-start; gap: 10px; text-transform: none; letter-spacing: 0; line-height: 1.5; color: #bca8aa; margin: 3px 0 18px; }
+.subscribe-form .consent input { width: 15px; height: 15px; margin: 2px 0 0; accent-color: var(--rose); flex: 0 0 auto; }
+.newsletter-button { width: auto; min-width: 185px; border: 1px solid var(--rose-soft); background: transparent; color: white; cursor: pointer; }
+.newsletter-button:disabled { opacity: .55; cursor: wait; }
+.honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; }
+.form-status { min-height: 22px; margin: 13px 0 0; font-size: 12px; line-height: 1.5; }
+.form-status.success { border: 0; padding: 0; font: 12px/1.5 "DM Sans", sans-serif; color: #d9e7cf; }
+.form-status.error { color: #f0c2c2; }
+.success { border: 1px solid rgba(255,255,255,.3); padding: 25px; font-family: "Playfair Display", serif; font-size: 20px; }
+
+footer { background: var(--wine); color: white; padding: 45px 5vw; display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; gap: 30px; }
+footer > p { text-align: center; color: #9d8d8f; font-size: 9px; line-height: 1.6; text-transform: uppercase; letter-spacing: .08em; }
+footer > div { display: flex; justify-content: flex-end; gap: 25px; text-transform: uppercase; letter-spacing: .12em; font-size: 9px; }
+.footer-brand small { color: var(--rose-soft); }
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* Rooted corner gardens — the plants sway, but never travel with the page */
+.corner-gardens { position: fixed; inset: 0; z-index: 7; pointer-events: none; overflow: hidden; }
+.corner-garden {
+  --wind: 0deg;
+  position: absolute; bottom: -2px; width: 155px; height: 150px;
+  opacity: .48; filter: drop-shadow(0 5px 8px rgba(75,32,40,.05));
+}
+.garden-left { left: 0; }
+.garden-right { right: 0; transform: scaleX(-1); }
+.grass {
+  position: absolute; bottom: 0; left: 18px; width: 2px; height: 70px;
+  border-radius: 100% 0; background: linear-gradient(to top, #74806b, #98a08d);
+  transform-origin: 50% 100%; transform: rotate(calc(var(--base-angle) + var(--wind)));
+  transition: transform .72s cubic-bezier(.2,.8,.2,1);
+}
+.wind-active .grass { transition-duration: .16s; }
+.grass::after {
+  content: ""; position: absolute; top: 24px; left: 0; width: 18px; height: 7px;
+  border: 1px solid #7b8873; border-left: 0; border-bottom: 0;
+  border-radius: 0 100% 0 100%;
+}
+.grass.g1 { left: 5px; height: 49px; --base-angle: -28deg; }
+.grass.g2 { left: 25px; height: 84px; --base-angle: -12deg; }
+.grass.g3 { left: 49px; height: 62px; --base-angle: 11deg; }
+.grass.g4 { left: 74px; height: 95px; --base-angle: -5deg; }
+.grass.g5 { left: 107px; height: 65px; --base-angle: 24deg; }
+.grass.g6 { left: 135px; height: 43px; --base-angle: 35deg; }
+.rooted-tulip {
+  position: absolute; bottom: 0; left: 43px; width: 38px; height: 125px;
+  transform-origin: 50% 100%; transform: rotate(calc(var(--base-angle) + var(--wind)));
+  transition: transform .9s cubic-bezier(.18,.9,.25,1);
+}
+.wind-active .rooted-tulip { transition-duration: .2s; }
+.rooted-tulip.t1 { --base-angle: -5deg; }
+.rooted-tulip.t2 { left: 92px; height: 98px; --base-angle: 8deg; transform: rotate(calc(var(--base-angle) + var(--wind))) scale(.78); }
+.rooted-tulip > b {
+  position: absolute; bottom: 0; left: 19px; width: 2px; height: calc(100% - 27px);
+  border-radius: 2px; background: linear-gradient(to top, #68765f, #87927e);
+}
+.rooted-tulip > b::before, .rooted-tulip > b::after {
+  content: ""; position: absolute; width: 22px; height: 9px; border: 1px solid #76836d;
+  background: rgba(247,243,235,.72); border-radius: 100% 0 100% 0;
+}
+.rooted-tulip > b::before { top: 30px; left: -21px; transform: rotate(12deg); }
+.rooted-tulip > b::after { top: 49px; left: 1px; transform: rotate(192deg); }
+.rooted-tulip > i {
+  position: absolute; top: 0; left: 4px; width: 31px; height: 34px;
+  background: linear-gradient(145deg, #e2b6b4, var(--rose));
+  clip-path: polygon(0 4%, 27% 20%, 50% 0, 73% 20%, 100% 4%, 88% 70%, 50% 100%, 12% 70%);
+  border-radius: 7px 7px 16px 16px;
+}
+
+/* Articles */
+.articles-page { background: var(--paper); }
+.articles-page nav a[aria-current="page"] { color: var(--rose); }
+.articles-hero {
+  min-height: 560px; padding: 110px 10vw 95px; display: flex; flex-direction: column; justify-content: center;
+  background:
+    radial-gradient(circle at 78% 15%, rgba(181,117,121,.2), transparent 28%),
+    linear-gradient(135deg, var(--ivory), #eee4dc);
+  border-bottom: 1px solid var(--line); position: relative; overflow: hidden;
+}
+.articles-hero::after {
+  content: ""; position: absolute; width: 440px; height: 440px; border: 1px solid rgba(75,32,40,.12);
+  border-radius: 50%; right: -80px; bottom: -230px; box-shadow: 0 0 0 70px rgba(75,32,40,.025), 0 0 0 140px rgba(75,32,40,.018);
+}
+.articles-hero h1 { font-size: clamp(58px, 7.5vw, 112px); line-height: .93; letter-spacing: -.05em; margin: 28px 0 35px; max-width: 970px; }
+.articles-hero h1 em { display: block; color: var(--rose); font-weight: 500; }
+.articles-hero > p:last-child { max-width: 560px; font: 18px/1.75 "Playfair Display", serif; color: var(--muted); }
+.articles-library { padding: 120px 9vw; display: grid; grid-template-columns: 34% 66%; gap: 7vw; max-width: 1500px; margin: auto; }
+.articles-intro { position: sticky; top: 130px; align-self: start; }
+.articles-intro h2 { font-size: clamp(36px, 4vw, 58px); line-height: 1.08; margin: 19px 0 28px; }
+.articles-intro > p:last-child { color: var(--muted); line-height: 1.8; font-size: 14px; max-width: 360px; }
+.articles-list { border-top: 1px solid var(--line); }
+.article-row { display: grid; grid-template-columns: 55px 1fr 35px; gap: 25px; align-items: center; padding: 46px 10px; border-bottom: 1px solid var(--line); transition: padding .3s, background .3s; }
+.article-row:hover { padding-left: 24px; padding-right: 24px; background: var(--ivory); }
+.article-number { color: var(--rose); font-size: 10px; letter-spacing: .12em; }
+.article-row p { margin: 0 0 12px; color: var(--rose); text-transform: uppercase; font-size: 9px; letter-spacing: .18em; }
+.article-row h3 { margin: 0 0 13px; font-size: clamp(25px, 2.7vw, 38px); line-height: 1.2; }
+.article-row small { color: var(--muted); font-size: 12px; line-height: 1.6; }
+.article-row b { font-size: 23px; font-weight: 300; color: var(--rose); }
+.articles-signup { background: var(--burgundy); color: white; padding: 105px 9vw; display: grid; grid-template-columns: 120px 1fr 1fr; gap: 5vw; align-items: center; }
+.signup-ornament { align-self: stretch; border-right: 1px solid rgba(255,255,255,.16); display: flex; flex-direction: column; justify-content: space-between; padding-right: 35px; }
+.signup-ornament > span:last-child { writing-mode: vertical-rl; transform: rotate(180deg); text-transform: uppercase; font-size: 8px; letter-spacing: .23em; color: var(--rose-soft); }
+.signup-copy h2 { font-size: clamp(39px, 4.6vw, 68px); line-height: 1.04; margin: 19px 0 28px; }
+.signup-copy > p:last-child { max-width: 480px; color: #c7b5b6; line-height: 1.75; font-size: 13px; }
+.articles-form { justify-self: end; }
+
+@media (max-width: 900px) {
+  .site-header { height: 74px; }
+  .menu-button { width: 40px; height: 40px; display: grid; align-content: center; gap: 7px; cursor: pointer; z-index: 2; }
+  .menu-button span { display: block; border-top: 1px solid var(--burgundy); }
+  nav { display: none; position: absolute; left: 0; right: 0; top: 74px; background: var(--ivory); padding: 30px 7vw; flex-direction: column; align-items: stretch; gap: 26px; border-bottom: 1px solid var(--line); }
+  nav.open { display: flex; }
+  .hero { min-height: 780px; align-items: flex-end; }
+  .hero-image { object-position: 70% center; }
+  .hero-shade { background: linear-gradient(0deg, rgba(247,243,235,.98) 0%, rgba(247,243,235,.92) 47%, rgba(247,243,235,.1) 85%); }
+  .hero-content { width: 100%; padding: 250px 7vw 80px; }
+  .hero h1 { font-size: clamp(51px, 14vw, 78px); }
+  .hero-note { display: none; }
+  .about { grid-template-columns: 1fr; padding: 85px 7vw; }
+  .about-aside { border: 0; border-bottom: 1px solid var(--line); padding: 0 0 35px; }
+  .about-aside p { margin: 0; }
+  .about-copy { padding: 55px 0 0; }
+  .book-card { grid-template-columns: 1fr; padding-top: 55px; }
+  .book-info { margin-top: -25px; padding: 75px 8vw 55px; }
+  .section-heading { align-items: flex-start; flex-direction: column; gap: 25px; }
+  .theme { grid-template-columns: 42px 1fr; }
+  .theme small { grid-column: 2; justify-self: start; }
+  .article-grid { grid-template-columns: 1fr; }
+  .newsletter { grid-template-columns: 1fr; }
+  .newsletter > .leaf-mark { display: none; }
+  .subscribe-form { justify-self: start; }
+  footer { grid-template-columns: 1fr; text-align: center; }
+  footer > div { justify-content: center; }
+  .articles-library { grid-template-columns: 1fr; padding: 85px 7vw; }
+  .articles-intro { position: static; }
+  .articles-signup { grid-template-columns: 1fr; padding: 85px 7vw; }
+  .signup-ornament { display: none; }
+  .articles-form { justify-self: start; }
+  .corner-garden { opacity: .32; }
+  .garden-left { transform: scale(.8); transform-origin: left bottom; }
+  .garden-right { transform: scaleX(-1) scale(.8); transform-origin: right bottom; }
+}
+
+@media (max-width: 560px) {
+  .hero-content { padding-left: 6vw; padding-right: 6vw; }
+  .hero-actions { align-items: stretch; flex-direction: column; gap: 25px; }
+  .button { min-width: 100%; }
+  .manifesto { padding: 85px 6vw; }
+  .columns, .facts { grid-template-columns: 1fr; gap: 24px; }
+  .books, .talks, .writings { padding: 85px 6vw; }
+  .book-selector { overflow-x: auto; }
+  .book-selector button { white-space: nowrap; }
+  .book-art { width: 270px; height: 400px; }
+  .book-art strong { font-size: 35px; }
+  .theme { align-items: start; }
+  .video-note { padding: 30px 25px; flex-direction: column; align-items: flex-start; }
+  .article-card { padding: 32px 28px; }
+  .article-card h3 { font-size: 29px; }
+  .newsletter { padding: 75px 7vw; }
+  .articles-hero { padding: 90px 7vw 75px; min-height: 520px; }
+  .articles-hero h1 { font-size: 55px; }
+  .article-row { grid-template-columns: 35px 1fr; gap: 15px; padding: 35px 0; }
+  .article-row b { display: none; }
+  .corner-garden { opacity: .26; }
+  .garden-left { transform: scale(.68); }
+  .garden-right { transform: scaleX(-1) scale(.68); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+  .grass, .rooted-tulip { transform: rotate(var(--base-angle)) !important; transition: none !important; }
+}
+</style>
+</head>
+<body class="articles-page">
+<a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+<div class="corner-gardens" aria-hidden="true">
+  <div class="corner-garden garden-left">
+    <span class="grass g1"></span><span class="grass g2"></span><span class="grass g3"></span><span class="grass g4"></span><span class="grass g5"></span><span class="grass g6"></span>
+    <span class="rooted-tulip t1"><i></i><b></b></span><span class="rooted-tulip t2"><i></i><b></b></span>
+  </div>
+  <div class="corner-garden garden-right">
+    <span class="grass g1"></span><span class="grass g2"></span><span class="grass g3"></span><span class="grass g4"></span><span class="grass g5"></span><span class="grass g6"></span>
+    <span class="rooted-tulip t1"><i></i><b></b></span><span class="rooted-tulip t2"><i></i><b></b></span>
+  </div>
+</div>
+<header class="site-header">
+  <a class="brand" href="/sady-santana-escritora-site/" aria-label="Sady Santana — início"><span class="leaf-mark"><i></i><i></i><i></i><i></i><b></b></span><span><strong>Sady Santana</strong><small>escritora</small></span></a>
+  <button class="menu-button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span></button>
+  <nav aria-label="Navegação principal"><a href="/sady-santana-escritora-site/#sobre">Sobre</a><a href="/sady-santana-escritora-site/#livros">Livros</a><a href="/sady-santana-escritora-site/#palestras">Palestras</a><a href="/sady-santana-escritora-site/artigos/" aria-current="page">Artigos</a><a class="nav-cta" href="#inscricao">Receber avisos <span>↗</span></a></nav>
+</header>
+<main id="conteudo">
+  <section class="articles-hero">
+    <p class="section-index">Escritos · fé & cotidiano</p>
+    <h1>Palavras para<br><em>discernir o tempo.</em></h1>
+    <p>Reflexões sobre feminilidade bíblica, família, cultura e a beleza de uma vida orientada pela verdade.</p>
+  </section>
+  <section class="articles-library">
+    <div class="articles-intro reveal"><p class="kicker">Acervo público</p><h2>Leia com calma.<br>Leve a verdade consigo.</h2><p>Reunimos aqui os textos de autoria publicamente identificada. Novos artigos poderão ser publicados diretamente neste espaço.</p></div>
+    <div class="articles-list">
+      <a class="article-row reveal" href="https://primeiraigrejavirtual.com.br/2015/11/11/mulher-crista-redes-sociais/" target="_blank" rel="noreferrer"><span class="article-number">01</span><div><p>Mulher & cultura digital</p><h3>Da vida “sem véu” à exposição “sem filtro”</h3><small>Uma reflexão sobre influência, modéstia e identidade cristã nas redes sociais.</small></div><b>↗</b></a>
+      <a class="article-row reveal" href="https://goodprime.co/voce-esta-preparando-seu-filho-para-o-que-vem-a-seguir/" target="_blank" rel="noreferrer"><span class="article-number">02</span><div><p>Família & cosmovisão</p><h3>Você está preparando seu filho para o que vem a seguir?</h3><small>Um chamado à responsabilidade dos pais na formação espiritual e cultural dos filhos.</small></div><b>↗</b></a>
+    </div>
+  </section>
+  <section class="articles-signup" id="inscricao">
+    <div class="signup-ornament"><span class="leaf-mark light"><i></i><i></i><i></i><i></i><b></b></span><span>Cartas de Sady</span></div>
+    <div class="signup-copy reveal"><p class="kicker">Novos artigos, sem ruído</p><h2>Receba uma carta<br>quando houver algo novo.</h2><p>Cadastre-se para receber somente os avisos de novos textos. Nada de mensagens diárias ou compartilhamento do seu endereço.</p></div>
+    <form class="subscribe-form articles-form reveal">
+      <label for="reader-name">Como podemos chamar você?</label><input id="reader-name" name="name" type="text" autocomplete="name" placeholder="Seu nome">
+      <label for="reader-email">Seu melhor e-mail</label><input id="reader-email" name="email" type="email" autocomplete="email" required placeholder="nome@exemplo.com.br">
+      <input class="honeypot" name="company" tabindex="-1" autocomplete="off">
+      <label class="consent"><input name="consent" type="checkbox" required> Concordo em receber avisos de novos artigos. Posso cancelar a inscrição a qualquer momento.</label>
+      <button class="button newsletter-button" type="submit">Quero receber</button>
+      <p class="form-status" role="status"></p>
+      <small>Se a lista utilizar confirmação dupla, enviaremos um e-mail para validar o cadastro.</small>
+    </form>
+  </section>
+</main>
+<footer><a class="brand footer-brand" href="/sady-santana-escritora-site/"><span class="leaf-mark light"><i></i><i></i><i></i><i></i><b></b></span><span><strong>Sady Santana</strong><small>escritora</small></span></a><p>Site-conceito criado a partir de informações públicas.</p><div><a href="/sady-santana-escritora-site/">Início</a><a href="/sady-santana-escritora-site/#livros">Livros</a><a href="#inscricao">Receber avisos</a><a href="#conteudo">↑</a></div></footer>
+<script>document.querySelector(".menu-button").addEventListener("click", function () {
+  const nav = document.querySelector("nav");
+  const open = nav.classList.toggle("open");
+  this.setAttribute("aria-expanded", String(open));
+});
+document.querySelectorAll("nav a").forEach((link) =>
+  link.addEventListener("click", () => document.querySelector("nav").classList.remove("open"))
+);
+
+const books = {
+  vestido: {
+    eyebrow: "Romance cristão · 2022",
+    title: "O vestido nunca usado",
+    subtitle: "",
+    description: "Uma história de amor bordada por relacionamentos, piedade, paixão e graça — e por um vestido carregado de significado. O romance aponta, em sua essência, para a maior história de amor de todos os tempos.",
+    meta: ["GodBooks", "224 páginas", "ISBN 978-65-89198-45-1"],
+    cover: window.BOOK_COVERS && window.BOOK_COVERS.vestido,
+    coverAlt: "Capa do livro O vestido nunca usado, de Sady Santana",
+    link: "https://godbooks.com.br/product/o-vestido-nunca-usado/",
+    cta: "Conhecer o livro"
+  },
+  feminilidade: {
+    eyebrow: "Não ficção cristã",
+    title: "Feminilidade Bíblica",
+    subtitle: "Repensando o papel da mulher à luz de Cantares",
+    description: "Uma reflexão sobre identidade, vocação e o papel da mulher cristã a partir das Escrituras, mencionada na biografia pública da autora.",
+    meta: ["Feminilidade", "Cantares", "Vida cristã"],
+    cover: window.BOOK_COVERS && window.BOOK_COVERS.feminilidade,
+    coverAlt: "Capa do livro Feminilidade Bíblica, de Sady Santana Ferreira",
+    link: "https://goodprime.co/e-dai-o-malabarismo-hermeneutico-da-imprensa-para-desmoralizar-o-presidente/",
+    cta: "Ver referência"
+  }
+};
+document.querySelectorAll(".book-selector button").forEach((button) => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".book-selector button").forEach((b) => b.setAttribute("aria-selected", "false"));
+    button.setAttribute("aria-selected", "true");
+    const id = button.dataset.book, book = books[id];
+    const art = document.querySelector(".book-art");
+    art.className = "book-art " + id;
+    const cover = art.querySelector("img");
+    cover.src = book.cover;
+    cover.alt = book.coverAlt;
+    document.querySelector(".book-info .kicker").textContent = book.eyebrow;
+    document.querySelector(".book-info h3").textContent = book.title;
+    const subtitle = document.querySelector(".book-info .subtitle");
+    subtitle.textContent = book.subtitle;
+    subtitle.hidden = !book.subtitle;
+    document.querySelector(".book-description").textContent = book.description;
+    document.querySelector(".book-info ul").innerHTML = book.meta.map((m) => "<li>" + m + "</li>").join("");
+    const link = document.querySelector(".book-info .button");
+    link.href = book.link;
+    link.firstChild.textContent = book.cta + " ";
+  });
+});
+
+const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+  if (entry.isIntersecting) entry.target.classList.add("visible");
+}), { threshold: .12 });
+document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+
+const gardens = document.querySelectorAll(".corner-garden");
+let lastScroll = window.scrollY;
+let windTimer = null;
+if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  window.addEventListener("scroll", () => {
+    const current = window.scrollY;
+    const velocity = Math.max(-1, Math.min(1, (current - lastScroll) / 36));
+    lastScroll = current;
+    gardens.forEach((garden, index) => {
+      const direction = index === 0 ? 1 : -1;
+      garden.style.setProperty("--wind", velocity * 11 * direction + "deg");
+      garden.classList.add("wind-active");
+    });
+    clearTimeout(windTimer);
+    windTimer = setTimeout(() => {
+      gardens.forEach((garden) => {
+        garden.style.setProperty("--wind", "0deg");
+        garden.classList.remove("wind-active");
+      });
+    }, 140);
+  }, { passive: true });
+}
+
+document.querySelectorAll(".subscribe-form").forEach((form) => {
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const button = this.querySelector("button[type=submit]");
+    const status = this.querySelector(".form-status");
+    const data = new FormData(this);
+    button.disabled = true;
+    button.textContent = "Enviando…";
+    status.textContent = "";
+    try {
+      const response = await fetch("https://sady-santana-escritora.elufurtado.chatgpt.site/api/inscrever", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: data.get("name"),
+          email: data.get("email"),
+          company: data.get("company"),
+          consent: data.get("consent") === "on"
+        })
+      });
+      const result = await response.json();
+      status.textContent = result.message || result.error;
+      status.className = "form-status " + (response.ok ? "success" : "error");
+      if (response.ok) this.reset();
+    } catch {
+      status.textContent = "Não foi possível conectar. Tente novamente.";
+      status.className = "form-status error";
+    } finally {
+      button.disabled = false;
+      button.textContent = "Quero receber";
+    }
+  });
+});
+</script>
+</body>
+</html>
