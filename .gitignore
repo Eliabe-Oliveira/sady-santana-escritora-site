@@ -1,0 +1,30 @@
+node_modules
+.next
+.open-next
+dist
+*.log
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# Local Codex/Sites metadata
+.openai/
+.codex/
+.agents/
+
+# Temporary, test and editor files
+coverage/
+.cache/
+tmp/
+temp/
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
