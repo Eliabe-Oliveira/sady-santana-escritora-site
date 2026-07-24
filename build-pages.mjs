@@ -26,11 +26,12 @@ function pageLinks(html) {
 }
 
 async function buildPages() {
-  const [homeTemplate, articlesTemplate, css, js] = await Promise.all([
+  const [homeTemplate, articlesTemplate, css, js, biographyImage] = await Promise.all([
     fs.readFile("static/index.html", "utf8"),
     fs.readFile("static/articles.html", "utf8"),
     fs.readFile("app/globals.css", "utf8"),
     fs.readFile("static/site.js", "utf8"),
+    fs.readFile("public/sady-santana-biografia.jpg"),
   ]);
   const pagesJs = js.replace(
     'fetch("/api/inscrever"',
@@ -41,6 +42,10 @@ async function buildPages() {
     .replace("/*__CSS__*/", css)
     .replace("/*__JS__*/", pagesJs)
     .replace("__HERO_IMAGE__", `${base}/hero-sady-santana.png`)
+    .replace(
+      "__BIO_IMAGE__",
+      `data:image/jpeg;base64,${biographyImage.toString("base64")}`,
+    )
     .split("__FEMININITY_COVER__").join(
       `${base}/feminilidade-biblica-capa.jpg`,
     )

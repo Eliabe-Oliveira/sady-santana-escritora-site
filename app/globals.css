@@ -145,11 +145,14 @@ nav > a:hover { color: var(--rose); }
 .manifesto blockquote em { color: var(--rose); }
 .quote-source { color: var(--muted); font: italic 14px "Playfair Display", serif; }
 
-.about { display: grid; grid-template-columns: 27% 73%; max-width: 1280px; margin: auto; padding: 135px 5vw; }
-.about-aside { border-right: 1px solid var(--line); padding-right: 55px; display: flex; flex-direction: column; gap: 34px; }
-.about-aside > span { text-transform: uppercase; letter-spacing: .18em; font-size: 10px; color: var(--rose); }
-.about-aside p { margin-top: auto; font: italic 18px/1.6 "Playfair Display", serif; color: var(--sage); }
-.about-copy { padding-left: 8vw; }
+.about { display: grid; grid-template-columns: minmax(280px, 36%) 1fr; max-width: 1280px; margin: auto; padding: 135px 5vw; align-items: center; }
+.about-portrait { margin: 0; position: relative; min-height: 640px; overflow: hidden; background: #ded5cc; }
+.about-portrait > img { display: block; width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; object-position: center 26%; }
+.about-portrait::after { content: ""; position: absolute; inset: 55% 0 0; background: linear-gradient(transparent, rgba(50,22,29,.78)); pointer-events: none; }
+.about-portrait figcaption { position: absolute; z-index: 1; left: 34px; right: 34px; bottom: 29px; color: white; }
+.about-portrait figcaption span { text-transform: uppercase; letter-spacing: .2em; font-size: 9px; color: var(--rose-soft); }
+.about-portrait figcaption p { margin: 9px 0 0; font: italic 18px/1.45 "Playfair Display", serif; }
+.about-copy { padding-left: 7vw; }
 .about h2 { max-width: 760px; font-size: clamp(38px, 4.7vw, 70px); line-height: 1.09; margin: 20px 0 50px; letter-spacing: -.035em; }
 .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 55px; color: #605752; line-height: 1.9; font-size: 15px; }
 .columns p { margin: 0; }
@@ -344,8 +347,7 @@ footer > div { display: flex; justify-content: flex-end; gap: 25px; text-transfo
   .hero h1 { font-size: clamp(51px, 14vw, 78px); }
   .hero-note { display: none; }
   .about { grid-template-columns: 1fr; padding: 85px 7vw; }
-  .about-aside { border: 0; border-bottom: 1px solid var(--line); padding: 0 0 35px; }
-  .about-aside p { margin: 0; }
+  .about-portrait { min-height: 0; aspect-ratio: 3 / 4; max-height: 720px; }
   .about-copy { padding: 55px 0 0; }
   .book-card { grid-template-columns: 1fr; padding-top: 55px; }
   .book-info { margin-top: -25px; padding: 75px 8vw 55px; }
@@ -373,6 +375,7 @@ footer > div { display: flex; justify-content: flex-end; gap: 25px; text-transfo
   .hero-actions { align-items: stretch; flex-direction: column; gap: 25px; }
   .button { min-width: 100%; }
   .manifesto { padding: 85px 6vw; }
+  .about-portrait figcaption { left: 24px; right: 24px; bottom: 23px; }
   .columns, .facts { grid-template-columns: 1fr; gap: 24px; }
   .books, .talks, .writings { padding: 85px 6vw; }
   .book-selector { overflow-x: auto; }

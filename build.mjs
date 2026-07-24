@@ -6,6 +6,7 @@ async function build() {
   const css = await fs.readFile("app/globals.css", "utf8");
   const js = await fs.readFile("static/site.js", "utf8");
   const image = await fs.readFile("public/hero-sady-santana.png");
+  const biographyImage = await fs.readFile("public/sady-santana-biografia.jpg");
   const femininityCover = await fs.readFile("public/feminilidade-biblica-capa.jpg");
   const dressCover = await fs.readFile("public/o-vestido-nunca-usado-capa.jpg");
   const hosting = await fs.readFile(".openai/hosting.json", "utf8");
@@ -14,6 +15,7 @@ async function build() {
     .replace("/*__CSS__*/", css)
     .replace("/*__JS__*/", js)
     .replace("__HERO_IMAGE__", `data:image/png;base64,${image.toString("base64")}`)
+    .replace("__BIO_IMAGE__", `data:image/jpeg;base64,${biographyImage.toString("base64")}`)
     .split("__FEMININITY_COVER__").join(`data:image/jpeg;base64,${femininityCover.toString("base64")}`)
     .split("__DRESS_COVER__").join(`data:image/jpeg;base64,${dressCover.toString("base64")}`);
   const articlesDocument = articlesHtml

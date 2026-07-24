@@ -190,11 +190,19 @@ export default function Home() {
         </section>
 
         <section className="about" id="sobre">
-          <div className="about-aside reveal">
-            <span>Sobre Sady</span>
-            <LeafMark />
-            <p>Escrever é também um modo de servir.</p>
-          </div>
+          <figure className="about-portrait reveal">
+            <Image
+              src="/sady-santana-biografia.jpg"
+              alt="Sady Santana sorrindo"
+              width={810}
+              height={1080}
+              sizes="(max-width: 900px) 86vw, 34vw"
+            />
+            <figcaption>
+              <span>Sobre Sady</span>
+              <p>Escrever é também um modo de servir.</p>
+            </figcaption>
+          </figure>
           <div className="about-copy reveal">
             <p className="kicker">Jornalismo, teologia & literatura</p>
             <h2>Uma escrita que nasce da fé e encontra o cotidiano.</h2>
