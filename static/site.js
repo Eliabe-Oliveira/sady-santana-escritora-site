@@ -1,11 +1,17 @@
-document.querySelector(".menu-button").addEventListener("click", function () {
-  const nav = document.querySelector("nav");
-  const open = nav.classList.toggle("open");
-  this.setAttribute("aria-expanded", String(open));
-});
-document.querySelectorAll("nav a").forEach((link) =>
-  link.addEventListener("click", () => document.querySelector("nav").classList.remove("open"))
-);
+const menuButton = document.querySelector(".menu-button");
+const primaryNav = document.querySelector(".site-header nav");
+if (menuButton && primaryNav) {
+  menuButton.addEventListener("click", function () {
+    const open = primaryNav.classList.toggle("open");
+    this.setAttribute("aria-expanded", String(open));
+    this.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+  });
+  primaryNav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
+    primaryNav.classList.remove("open");
+    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.setAttribute("aria-label", "Abrir menu");
+  }));
+}
 
 const books = {
   vestido: {
@@ -37,6 +43,7 @@ document.querySelectorAll(".book-selector button").forEach((button) => {
     button.setAttribute("aria-selected", "true");
     const id = button.dataset.book, book = books[id];
     const art = document.querySelector(".book-art");
+    if (!art) return;
     art.className = "book-art " + id;
     const cover = art.querySelector("img");
     cover.src = book.cover;
@@ -81,37 +88,3 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     }, 140);
   }, { passive: true });
 }
-
-document.querySelectorAll(".subscribe-form").forEach((form) => {
-  form.addEventListener("submit", async function (event) {
-    event.preventDefault();
-    const button = this.querySelector("button[type=submit]");
-    const status = this.querySelector(".form-status");
-    const data = new FormData(this);
-    button.disabled = true;
-    button.textContent = "Enviando…";
-    status.textContent = "";
-    try {
-      const response = await fetch("/api/inscrever", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          name: data.get("name"),
-          email: data.get("email"),
-          company: data.get("company"),
-          consent: data.get("consent") === "on"
-        })
-      });
-      const result = await response.json();
-      status.textContent = result.message || result.error;
-      status.className = "form-status " + (response.ok ? "success" : "error");
-      if (response.ok) this.reset();
-    } catch {
-      status.textContent = "Não foi possível conectar. Tente novamente.";
-      status.className = "form-status error";
-    } finally {
-      button.disabled = false;
-      button.textContent = "Quero receber";
-    }
-  });
-});

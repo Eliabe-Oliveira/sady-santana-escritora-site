@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SANITY_STUDIO_PROJECT_ID: zwhnxf2h
+      SANITY_STUDIO_DATASET: production
+      SANITY_CLI_DISABLE_TELEMETRY: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            sanity/package-lock.json
+      - name: Install site dependencies
+        run: npm ci
+      - name: Run editorial regression tests
+        run: npm test
+      - name: Build Worker
+        run: npm run build
+      - name: Build GitHub Pages preview
+        run: npm run build:pages
+      - name: Check Worker syntax
+        run: node --check dist/server/index.js
+      - name: Install Studio dependencies
+        working-directory: sanity
+        run: npm ci
+      - name: Build Studio
+        working-directory: sanity
+        run: npm run build
+      - name: Validate Studio schemas locally
+        working-directory: sanity
+        run: npx sanity schema validate
