@@ -44,4 +44,6 @@ Faça um novo build/deploy do Worker depois de cadastrar as variáveis. Publica�
 
 ## Permanência do slug
 
-O Studio consulta a versão já publicada do documento durante a validação. Se um artigo já teve versão publicada, qualquer mudança do slug é bloqueada mesmo depois de alterar o estado para rascunho ou arquivado. Artigos nunca publicados continuam livres para definir o slug inicial.
+Na primeira publicação, a ação **Publicar** grava automaticamente o slug em um campo interno oculto (`firstPublishedSlug`) usando `setIfMissing`. Publicações posteriores não sobrescrevem esse valor. A validação compara o slug editado com esse registro e rejeita mudanças mesmo se o artigo for arquivado, voltar para rascunho ou passar por **Unpublish**.
+
+Documentos antigos que já estejam publicados também são protegidos pela consulta da versão publicada; na publicação seguinte, o registro interno é preenchido. Artigos nunca publicados continuam livres para definir o primeiro slug. Para retirar um texto do site, prefira o estado **Arquivado** em vez de apagar ou despublicar o documento.

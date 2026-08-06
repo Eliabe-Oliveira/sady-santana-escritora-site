@@ -11,6 +11,7 @@
 9. Para publicar, selecione o estado **Publicado** e use **Publish/Publicar**. O site costuma refletir a mudança em até alguns minutos por causa do cache.
 10. Para corrigir, mantenha a data original e preencha **Data da última atualização editorial**.
 11. Para retirar um texto sem perdê-lo, escolha **Arquivado**. Evite apagar documentos.
-12. Nunca altere o **Endereço permanente** de um artigo publicado: leitores, buscadores e compartilhamentos dependem dele. O campo fica bloqueado depois da publicação.
+12. Nunca altere o **Endereço permanente** de um artigo publicado: leitores, buscadores e compartilhamentos dependem dele. Na primeira publicação, o Studio registra internamente o slug original e passa a rejeitar qualquer valor diferente.
+13. Esse bloqueio continua ativo se o artigo for arquivado, voltar para rascunho ou passar por **Unpublish**. Para retirar um texto do site, prefira sempre o estado **Arquivado**, preservando o documento e seu histórico editorial.
 
 Antes de publicar, confira: título, resumo, categoria, corpo completo, data, texto alternativo de cada imagem e estado **Publicado**.

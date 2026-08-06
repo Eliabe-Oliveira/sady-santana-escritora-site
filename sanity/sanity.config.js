@@ -3,6 +3,7 @@ import {structureTool} from "sanity/structure";
 import {visionTool} from "@sanity/vision";
 import {schemaTypes} from "./schemaTypes/index.js";
 import {structure} from "./structure.js";
+import {withPermanentSlugLock} from "./actions/lockSlugPublishAction.js";
 
 export default defineConfig({
   name: "sady_editorial",
@@ -13,5 +14,8 @@ export default defineConfig({
   schema: {types: schemaTypes},
   document: {
     newDocumentOptions: (items) => items.filter((item) => item.templateId === "article"),
+    actions: (previousActions, context) => context.schemaType === "article"
+      ? previousActions.map((action) => action.action === "publish" ? withPermanentSlugLock(action) : action)
+      : previousActions,
   },
 });
