@@ -13,7 +13,7 @@ export default defineConfig({
   plugins: [structureTool({structure}), visionTool()],
   schema: {types: schemaTypes},
   document: {
-    newDocumentOptions: (items) => items.filter((item) => item.templateId === "article"),
+    newDocumentOptions: (items) => items.filter((item) => ["article", "category"].includes(item.templateId)),
     actions: (previousActions, context) => context.schemaType === "article"
       ? previousActions.map((action) => action.action === "publish" ? withPermanentSlugLock(action) : action)
       : previousActions,
