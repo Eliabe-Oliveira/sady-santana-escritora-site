@@ -1,0 +1,14 @@
+[
+  {
+    "title": "TÍTULO ORIGINAL",
+    "slug": "endereco-original-estavel",
+    "summary": "RESUMO APROVADO",
+    "publishedAt": "AAAA-MM-DDT12:00:00-03:00",
+    "updatedAt": null,
+    "topics": [],
+    "sourceReference": "URL ORIGINAL, SE NECESSÁRIA",
+    "body": [
+      {"_type": "block", "_key": "bloco-1", "style": "normal", "markDefs": [], "children": [{"_type": "span", "_key": "texto-1", "marks": [], "text": "TEXTO ORIGINAL AUTORIZADO"}]}
+    ]
+  }
+]

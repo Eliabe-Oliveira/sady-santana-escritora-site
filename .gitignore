@@ -2,6 +2,7 @@ node_modules
 .next
 .open-next
 dist
+sanity/.sanity/
 *.log
 
 # Local environment and credentials
@@ -13,7 +14,8 @@ dist
 *.p12
 
 # Local Codex/Sites metadata
-.openai/
+.openai/*
+!.openai/hosting.json
 .codex/
 .agents/
 

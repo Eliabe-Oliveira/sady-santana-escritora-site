@@ -73,8 +73,6 @@ function Arrow({ down = false }) {
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeBook, setActiveBook] = useState("vestido");
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -89,14 +87,6 @@ export default function Home() {
   }, []);
 
   const book = books.find((item) => item.id === activeBook);
-
-  const handleSubscribe = (event) => {
-    event.preventDefault();
-    if (email.trim()) {
-      setSubscribed(true);
-      setEmail("");
-    }
-  };
 
   return (
     <>
@@ -334,36 +324,12 @@ export default function Home() {
               <h2>Reflexões para<br />discernir o tempo.</h2>
             </div>
           </div>
-          <div className="article-grid">
-            <a
-              className="article-card reveal"
-              href="https://primeiraigrejavirtual.com.br/2015/11/11/mulher-crista-redes-sociais/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span>Mulher & cultura digital</span>
-              <h3>Da vida “sem véu” à exposição “sem filtro”</h3>
-              <p>
-                Uma reflexão sobre influência, modéstia e identidade cristã nas
-                redes sociais.
-              </p>
-              <b>Ler artigo <Arrow /></b>
-            </a>
-            <a
-              className="article-card featured reveal"
-              href="https://goodprime.co/voce-esta-preparando-seu-filho-para-o-que-vem-a-seguir/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span>Família & cosmovisão</span>
-              <h3>Você está preparando seu filho para o que vem a seguir?</h3>
-              <p>
-                Um chamado à responsabilidade dos pais na formação espiritual
-                e cultural dos filhos.
-              </p>
-              <b>Ler artigo <Arrow /></b>
-            </a>
-          </div>
+          <a className="article-card featured reveal" href="/artigos">
+            <span>Acervo editorial</span>
+            <h3>Leia todos os artigos de Sady.</h3>
+            <p>Textos sobre fé, família, cultura e feminilidade bíblica.</p>
+            <b>Visitar o acervo <Arrow /></b>
+          </a>
         </section>
 
         <section className="newsletter" id="contato">
@@ -376,31 +342,10 @@ export default function Home() {
               plataforma de e-mail para transformá-lo em uma lista real.
             </p>
           </div>
-          <form className="subscribe-form reveal" onSubmit={handleSubscribe}>
-            {subscribed ? (
-              <p className="success" role="status">
-                Obrigada! A demonstração funcionou perfeitamente.
-              </p>
-            ) : (
-              <>
-                <label htmlFor="email">Seu melhor e-mail</label>
-                <div>
-                  <input
-                    id="email"
-                    type="email"
-                    required
-                    placeholder="nome@exemplo.com.br"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                  />
-                  <button type="submit" aria-label="Cadastrar e-mail">
-                    <Arrow />
-                  </button>
-                </div>
-                <small>Sem excesso. Apenas quando houver algo que valha a leitura.</small>
-              </>
-            )}
-          </form>
+          <div className="subscribe-form reveal">
+            <p role="status">A lista de e-mails será integrada em uma etapa futura.</p>
+            <small>Os artigos já podem ser lidos sem cadastro.</small>
+          </div>
         </section>
       </main>
 

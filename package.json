@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "build:pages": "node build-pages.mjs"
+    "build:pages": "node build-pages.mjs",
+    "test": "node tests/articles.test.mjs"
   },
   "dependencies": {},
   "devDependencies": {}
