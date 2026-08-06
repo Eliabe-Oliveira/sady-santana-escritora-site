@@ -1,6 +1,7 @@
 {
   "name": "sady-santana-editorial-studio",
   "private": true,
+  "type": "module",
   "version": "1.0.0",
   "scripts": {
     "dev": "sanity dev",

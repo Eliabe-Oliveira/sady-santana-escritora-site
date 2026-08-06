@@ -1,19 +1,25 @@
 # Configuração externa do Sanity
 
-## Pré-requisitos e criação
+## Studio já configurado
 
-Use Node 20 ou 22. Na raiz do site, execute:
+O projeto já existe. Não execute `sanity init` e não substitua a pasta `sanity/`.
 
-```bash
-npx sanity@latest init --env .env.local
-```
-
-Selecione **Create new project**, nome **Sady Santana Editorial**, organização pessoal ou existente, dataset **production**, visibilidade **Public**, e não substitua a pasta `sanity/` preparada. Se o assistente tentar gerar um novo projeto, cancele depois de obter o `projectId` e configure manualmente `sanity/.env.local`:
+Use Node 22 e crie localmente `sanity/.env.local`:
 
 ```text
-SANITY_STUDIO_PROJECT_ID=SEU_PROJECT_ID
+SANITY_STUDIO_PROJECT_ID=zwhnxf2h
 SANITY_STUDIO_DATASET=production
 ```
+
+O arquivo é local e não deve ser versionado. Depois execute:
+
+```bash
+cd sanity
+npm install
+npm run dev
+```
+
+Acesse `http://localhost:3333`.
 
 Cadastre em **Manage project > API > CORS origins**:
 
@@ -24,7 +30,7 @@ No ambiente de hospedagem do site, configure `PUBLIC_SANITY_PROJECT_ID`, `PUBLIC
 
 ## Categorias e Studio
 
-Execute `cd sanity && npm install && npm run dev`. Crie as categorias iniciais: Fé; Feminilidade Bíblica; Família; Literatura; Cultura; Vida Cristã. Quando estiver validado, `npm run deploy` publica o Studio gratuitamente; escolha um hostname como `sady-santana-editorial` se estiver disponível.
+Crie as categorias iniciais: Fé; Feminilidade Bíblica; Família; Literatura; Cultura; Vida Cristã. Quando estiver validado, `npm run deploy` publica o Studio gratuitamente; escolha um hostname como `sady-santana-editorial` se estiver disponível. Cadastre depois a URL definitiva do Studio no CORS com credenciais habilitadas.
 
 Confirme a conclusão abrindo o Studio, criando um rascunho e verificando que ele não aparece em `/artigos`. Depois publique um artigo de teste autorizado, confira sua rota individual e arquive-o.
 
@@ -35,3 +41,7 @@ Copie `sanity/import-template.json`, substitua somente pelos textos e datas auto
 ## Deploy e segredos
 
 Faça um novo build/deploy do Worker depois de cadastrar as variáveis. Publicações seguintes aparecem dinamicamente, sem rebuild. Nunca configure `SANITY_READ_TOKEN` ou `SANITY_PREVIEW_SECRET` como variável pública nem os inclua no bundle.
+
+## Permanência do slug
+
+O Studio consulta a versão já publicada do documento durante a validação. Se um artigo já teve versão publicada, qualquer mudança do slug é bloqueada mesmo depois de alterar o estado para rascunho ou arquivado. Artigos nunca publicados continuam livres para definir o slug inicial.

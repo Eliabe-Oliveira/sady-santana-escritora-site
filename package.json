@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node build.mjs",
     "build:pages": "node build-pages.mjs",
-    "test": "node tests/articles.test.mjs"
+    "test": "node build.mjs && node tests/articles.test.mjs"
   },
   "dependencies": {},
   "devDependencies": {}

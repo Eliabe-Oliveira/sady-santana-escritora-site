@@ -1,4 +1,5 @@
 import {defineArrayMember, defineField, defineType} from "sanity";
+import {validatePermanentSlug} from "./slugProtection.js";
 
 const published = ({document}) => document?.status === "published";
 export default defineType({
@@ -9,7 +10,7 @@ export default defineType({
   ],
   fields: [
     defineField({name: "title", title: "Título", type: "string", group: "writing", validation: (r) => r.required().max(120)}),
-    defineField({name: "slug", title: "Endereço permanente", description: "Depois de publicar, não altere: links antigos deixariam de funcionar.", type: "slug", group: "writing", options: {source: "title", maxLength: 96}, readOnly: published, validation: (r) => r.required()}),
+    defineField({name: "slug", title: "Endereço permanente", description: "Depois da primeira publicação, este endereço fica permanentemente protegido, inclusive ao arquivar.", type: "slug", group: "writing", options: {source: "title", maxLength: 96}, readOnly: published, validation: (r) => r.required().custom(validatePermanentSlug)}),
     defineField({name: "summary", title: "Resumo", description: "Duas ou três frases para o acervo e compartilhamento.", type: "text", rows: 3, group: "writing", validation: (r) => r.required().max(280)}),
     defineField({name: "category", title: "Categoria", type: "reference", to: [{type: "category"}], group: "writing", validation: (r) => r.required()}),
     defineField({name: "topics", title: "Temas e palavras-chave", type: "array", of: [{type: "string"}], options: {layout: "tags"}, group: "writing"}),
