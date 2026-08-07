@@ -98,6 +98,20 @@ scenario("remove formulário de newsletter legado", async () => {
   assert.doesNotMatch(page.body, /Quero receber|type="email"/);
 });
 
+scenario("mantém o catálogo na coluna correta do acervo", async () => {
+  result = [valid];
+  const page = await request("/artigos");
+  const library = page.body.match(/<section class="articles-library">([\s\S]*?)<\/section>/)?.[1] || "";
+  assert.match(library, /class="article-tools"/);
+  assert.match(library, /class="articles-list"/);
+  assert.doesNotMatch(library, /article-cover-fallback/);
+  assert.match(page.body, /\.article-tools,\.articles-list,\.pagination\{grid-column:2\}/);
+  assert.match(page.body, /\.articles-list\{min-width:0\}/);
+  assert.match(page.body, /@media\(max-width:900px\)\{\.article-tools,\.articles-list,\.pagination\{grid-column:1\}/);
+  const css = await readFile("app/globals.css", "utf8");
+  assert.match(css, /grid-template-columns:\s*minmax\(260px, 34%\) minmax\(0, 1fr\)/);
+});
+
 scenario("define canonical e próxima página no acervo", async () => {
   result = Array.from({length: 17}, (_, index) => ({...valid, _id: `article-${index}`, slug: `article-${index}`, title: `Artigo ${index}`}));
   const page = await request("/artigos");
