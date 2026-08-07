@@ -67,6 +67,9 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="pt-BR">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("js");' }} />
+      </head>
       <body>
         {children}
         <script

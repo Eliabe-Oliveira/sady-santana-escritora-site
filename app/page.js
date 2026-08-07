@@ -75,15 +75,43 @@ export default function Home() {
   const [activeBook, setActiveBook] = useState("vestido");
 
   useEffect(() => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!("IntersectionObserver" in window) || reduceMotion) {
+      document.documentElement.classList.remove("motion-ready");
+      return undefined;
+    }
     const observer = new IntersectionObserver(
       (entries) =>
         entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add("visible");
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
         }),
-      { threshold: 0.14 }
+      { threshold: 0.12, rootMargin: "0px 0px -6%" }
     );
+    document.documentElement.classList.add("motion-ready");
     document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const header = document.querySelector(".site-header");
+    if (!header) return undefined;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      header.classList.toggle("is-scrolled", window.scrollY > 12);
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   const book = books.find((item) => item.id === activeBook);
@@ -142,17 +170,17 @@ export default function Home() {
           />
           <div className="hero-shade" />
           <div className="hero-content">
-            <p className="kicker">Fé · literatura · feminilidade bíblica</p>
+            <p className="kicker" data-hero-item="kicker">Fé · literatura · feminilidade bíblica</p>
             <h1>
-              Palavras que
-              <em>apontam para a graça.</em>
+              <span data-hero-item="title">Palavras que</span>
+              <em data-hero-item="emphasis">apontam para a graça.</em>
             </h1>
-            <p className="hero-copy">
+            <p className="hero-copy" data-hero-item="copy">
               Jornalista e escritora cristã, Sady Santana escreve sobre a beleza
               da fé vivida no cotidiano — entre histórias, afetos e a verdade
               que permanece.
             </p>
-            <div className="hero-actions">
+            <div className="hero-actions" data-hero-item="actions">
               <a className="button primary" href="#livros">
                 Conheça os livros <Arrow down />
               </a>
@@ -161,7 +189,7 @@ export default function Home() {
               </a>
             </div>
           </div>
-          <div className="hero-note">
+          <div className="hero-note" data-hero-item="note">
             <LeafMark light />
             <p>
               <span>Uma vida de palavras</span>
@@ -171,12 +199,12 @@ export default function Home() {
         </section>
 
         <section className="manifesto">
-          <p className="section-index">01 · essência</p>
-          <blockquote className="reveal">
+          <p className="section-index reveal" data-reveal="soft">01 · essência</p>
+          <blockquote className="reveal" data-reveal="up" data-delay="1">
             “A felicidade da existência humana está no{" "}
-            <em>Criador de todas as coisas.</em>”
+            <em className="manifesto-emphasis">Criador de todas as coisas.</em>”
           </blockquote>
-          <p className="quote-source">— O vestido nunca usado</p>
+          <p className="quote-source reveal" data-reveal="soft" data-delay="3">— O vestido nunca usado</p>
         </section>
 
         <section className="about" id="sobre">

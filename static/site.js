@@ -61,16 +61,39 @@ document.querySelectorAll(".book-selector button").forEach((button) => {
   });
 });
 
-const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
-  if (entry.isIntersecting) entry.target.classList.add("visible");
-}), { threshold: .12 });
-document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if ("IntersectionObserver" in window && !reduceMotion) {
+  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      observer.unobserve(entry.target);
+    }
+  }), { threshold: .12, rootMargin: "0px 0px -6%" });
+  document.documentElement.classList.add("motion-ready");
+  document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+} else {
+  document.documentElement.classList.remove("motion-ready");
+}
+
+const siteHeader = document.querySelector(".site-header");
+let headerFrame = 0;
+const updateHeader = () => {
+  headerFrame = 0;
+  if (siteHeader) siteHeader.classList.toggle("is-scrolled", window.scrollY > 12);
+};
+const requestHeaderUpdate = () => {
+  if (!headerFrame) headerFrame = window.requestAnimationFrame(updateHeader);
+};
+updateHeader();
+window.addEventListener("scroll", requestHeaderUpdate, { passive: true });
 
 const gardens = document.querySelectorAll(".corner-garden");
 let lastScroll = window.scrollY;
 let windTimer = null;
-if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  window.addEventListener("scroll", () => {
+let gardenFrame = 0;
+if (!reduceMotion) {
+  const updateGardens = () => {
+    gardenFrame = 0;
     const current = window.scrollY;
     const velocity = Math.max(-1, Math.min(1, (current - lastScroll) / 36));
     lastScroll = current;
@@ -86,5 +109,8 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         garden.classList.remove("wind-active");
       });
     }, 140);
+  };
+  window.addEventListener("scroll", () => {
+    if (!gardenFrame) gardenFrame = window.requestAnimationFrame(updateGardens);
   }, { passive: true });
 }
