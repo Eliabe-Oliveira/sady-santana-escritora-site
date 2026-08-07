@@ -221,6 +221,26 @@ scenario("bundle público não contém segredos privados", async () => {
   assert.doesNotMatch(bundle, /SANITY_READ_TOKEN|SANITY_PREVIEW_SECRET|Bearer\s+[A-Za-z0-9]/);
 });
 
+scenario("mantém a fundação de motion progressiva e acessível", async () => {
+  const [css, script, home, packageJson] = await Promise.all([
+    readFile("app/globals.css", "utf8"),
+    readFile("static/site.js", "utf8"),
+    readFile("static/index.html", "utf8"),
+    readFile("package.json", "utf8"),
+  ]);
+  assert.match(css, /\.reveal\s*\{\s*opacity:\s*1;\s*transform:\s*none;/);
+  assert.match(css, /\.motion-ready \.reveal:not\(\.visible\)/);
+  assert.match(css, /prefers-reduced-motion:\s*reduce/);
+  assert.match(script, /"IntersectionObserver" in window/);
+  assert.match(script, /classList\.add\("motion-ready"\)/);
+  assert.match(script, /observer\.unobserve\(entry\.target\)/);
+  assert.match(script, /requestAnimationFrame\(updateHeader\)/);
+  assert.match(script, /requestAnimationFrame\(updateGardens\)/);
+  assert.match(home, /data-hero-item="kicker"/);
+  assert.match(home, /data-reveal="soft"/);
+  assert.doesNotMatch(packageJson, /gsap|framer-motion|animejs|locomotive-scroll/);
+});
+
 for (const {name, run} of scenarios) {
   await run();
   console.log(`✓ ${name}`);
