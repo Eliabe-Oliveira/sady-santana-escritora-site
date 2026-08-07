@@ -238,6 +238,9 @@ scenario("mantém a fundação de motion progressiva e acessível", async () => 
   assert.match(script, /requestAnimationFrame\(updateGardens\)/);
   assert.match(home, /data-hero-item="kicker"/);
   assert.match(home, /data-reveal="soft"/);
+  assert.match(css, /\.hero h1 \[data-hero-item="title"\]\s*\{\s*display:\s*block;/);
+  assert.match(css, /\.hero \.button\.primary:hover > span, \.hero \.button\.primary:focus-visible > span\s*\{\s*transform:\s*translateY\(3px\);/);
+  assert.doesNotMatch(css, /(?:^|\n)\.button:hover > span/);
   assert.doesNotMatch(packageJson, /gsap|framer-motion|animejs|locomotive-scroll/);
 });
 
