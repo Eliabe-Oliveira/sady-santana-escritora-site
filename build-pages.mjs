@@ -26,10 +26,11 @@ function pageLinks(html) {
 }
 
 async function buildPages() {
-  const [homeTemplate, articlesTemplate, css, js, biographyImage] = await Promise.all([
+  const [homeTemplate, articlesTemplate, css, editorialJs, js, biographyImage] = await Promise.all([
     fs.readFile("static/index.html", "utf8"),
     fs.readFile("static/articles.html", "utf8"),
     fs.readFile("app/globals.css", "utf8"),
+    fs.readFile("static/editorial.js", "utf8"),
     fs.readFile("static/site.js", "utf8"),
     fs.readFile("public/sady-santana-biografia.jpg"),
   ]);
@@ -40,6 +41,7 @@ async function buildPages() {
 
   const home = pageLinks(homeTemplate)
     .replace("/*__CSS__*/", css)
+    .replace("/*__EDITORIAL_JS__*/", editorialJs)
     .replace("/*__JS__*/", pagesJs)
     .replace("__HERO_IMAGE__", `${base}/hero-sady-santana.png`)
     .replace(
@@ -55,7 +57,7 @@ async function buildPages() {
 
   const articles = pageLinks(articlesTemplate)
     .replace("/*__CSS__*/", css)
-    .replace("/*__JS__*/", pagesJs);
+    .replace("/*__EDITORIAL_JS__*/", editorialJs);
 
   await fs.mkdir("docs/artigos", { recursive: true });
   await Promise.all([

@@ -78,5 +78,8 @@ Em `prefers-reduced-motion: reduce`, reveals, coreografia do hero, transições 
 - **Livros:** troca de ficha editorial em fases de saída, atualização e entrada; capa antecede os detalhes e cliques sucessivos cancelam a transição anterior.
 - **Palestras:** heading e linhas temáticas entram em stagger; em dispositivos com hover, cada linha responde apenas de modo ambiental.
 - **Fechamento:** ornamento, kicker, título, texto, status e chamada encerram a página em progressão silenciosa.
+- **Acervo de artigos:** hero e introdução entram em sequência curta; linhas, filtros e paginação respondem por `transform`, cor e opacidade, sem deslocar o layout.
+- **Leitura de artigo:** cabeçalho e capa estabelecem a entrada da página; relacionados e chamada de livros fecham a leitura com um único reveal cada.
+- **Corpo do artigo:** não animar a prosa durante o scroll. Parágrafos, subtítulos, listas, citações, links e imagens permanecem estáticos para preservar concentração e ritmo de leitura.
 
 Todos os padrões permanecem visíveis sem JavaScript ou sem `IntersectionObserver` e tornam-se imediatos com movimento reduzido.

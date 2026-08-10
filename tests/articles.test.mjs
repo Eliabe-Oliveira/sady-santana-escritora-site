@@ -222,8 +222,9 @@ scenario("bundle público não contém segredos privados", async () => {
 });
 
 scenario("mantém a fundação de motion progressiva e acessível", async () => {
-  const [css, script, home, packageJson] = await Promise.all([
+  const [css, editorial, script, home, packageJson] = await Promise.all([
     readFile("app/globals.css", "utf8"),
+    readFile("static/editorial.js", "utf8"),
     readFile("static/site.js", "utf8"),
     readFile("static/index.html", "utf8"),
     readFile("package.json", "utf8"),
@@ -231,10 +232,10 @@ scenario("mantém a fundação de motion progressiva e acessível", async () => 
   assert.match(css, /\.reveal\s*\{\s*opacity:\s*1;\s*transform:\s*none;/);
   assert.match(css, /\.motion-ready \.reveal:not\(\.visible\)/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.match(script, /"IntersectionObserver" in window/);
-  assert.match(script, /classList\.add\("motion-ready"\)/);
-  assert.match(script, /observer\.unobserve\(entry\.target\)/);
-  assert.match(script, /requestAnimationFrame\(updateHeader\)/);
+  assert.match(editorial, /"IntersectionObserver" in window/);
+  assert.match(editorial, /classList\.add\("motion-ready"\)/);
+  assert.match(editorial, /observer\.unobserve\(entry\.target\)/);
+  assert.match(editorial, /requestAnimationFrame\(updateHeader\)/);
   assert.match(script, /requestAnimationFrame\(updateGardens\)/);
   assert.match(home, /data-hero-item="kicker"/);
   assert.match(home, /data-reveal="soft"/);
@@ -291,6 +292,67 @@ scenario("mantém novos capítulos progressivos sem tocar artigos", async () => 
   assert.match(css, /\.motion-ready \.chapter\.reveal \{ opacity: 1; transform: none; \}/);
   assert.match(css, /prefers-reduced-motion:[\s\S]*\.book-info \[data-book-detail\]/);
   assert.doesNotMatch(articles, /data-chapter="about"|data-book-detail|data-video-item/);
+});
+
+scenario("aplica a coreografia editorial ao acervo sem layout shift", async () => {
+  result = Array.from({length: 7}, (_, index) => ({...valid, _id: `motion-${index}`, slug: `motion-${index}`, title: `Movimento ${index}`}));
+  const [{body}, css, archive] = await Promise.all([
+    request("/artigos"),
+    readFile("app/globals.css", "utf8"),
+    readFile("static/articles.html", "utf8"),
+  ]);
+  assert.match(archive, /data-editorial-sequence="archive-hero"/);
+  assert.match(archive, /data-editorial-sequence="archive-intro"/);
+  assert.equal((body.match(/class="article-row reveal" data-reveal="soft"/g) || []).length, 7);
+  assert.match(body, /data-delay="4"/);
+  assert.doesNotMatch(css, /transition:\s*padding/);
+  assert.doesNotMatch(css, /article-row:hover[^{}]*padding/);
+  assert.match(css, /article-row:hover > div[\s\S]{0,120}translateX\(5px\)/);
+});
+
+scenario("mantém a prosa imóvel e anima somente os marcos da leitura", async () => {
+  result = {
+    ...valid,
+    coverImage: {alt: "Capa editorial", asset: {url: "https://cdn.sanity.io/images/test/production/cover.jpg"}},
+    related: {...valid, _id: "related", slug: "relacionado", title: "Relacionado"},
+  };
+  const page = await request("/artigos/artigo-publicado");
+  assert.match(page.body, /class="article-header editorial-sequence reveal"/);
+  assert.match(page.body, /class="article-cover article-cover-enter reveal"/);
+  assert.match(page.body, /class="related reveal" data-reveal="soft"/);
+  assert.match(page.body, /class="books-callout reveal" data-reveal="soft"/);
+  const prose = page.body.match(/<div class="prose">([\s\S]*?)<\/div><div class="article-actions">/)?.[1] || "";
+  assert.doesNotMatch(prose, /\breveal\b|data-reveal|data-editorial-item/);
+});
+
+scenario("oferece cópia de link acessível com fallback", async () => {
+  result = valid;
+  const [page, editorial] = await Promise.all([
+    request("/artigos/artigo-publicado"),
+    readFile("static/editorial.js", "utf8"),
+  ]);
+  assert.match(page.body, /data-copy-link aria-describedby="copy-status"/);
+  assert.match(page.body, /id="copy-status" aria-live="polite"/);
+  assert.doesNotMatch(page.body, /onclick=/);
+  assert.match(editorial, /navigator\.clipboard\.writeText/);
+  assert.match(editorial, /document\.execCommand\("copy"\)/);
+});
+
+scenario("preserva estados HTTP, SEO e filtros server-side com o runtime comum", async () => {
+  result = [valid];
+  const archive = await request("/artigos?q=publicado&categoria=F%C3%A9");
+  assert.match(archive.body, /<form class="archive-filters" method="get" action="\/artigos" role="search">/);
+  assert.match(archive.body, /<meta name="robots" content="noindex,follow">/);
+  result = valid;
+  const detail = await request("/artigos/artigo-publicado");
+  assert.match(detail.body, /"@type":"BlogPosting"/);
+  assert.match(detail.body, /<link rel="canonical" href="https:\/\/example\.test\/artigos\/artigo-publicado">/);
+  assert.match(detail.body, /requestAnimationFrame\(updateHeader\)/);
+  result = null;
+  assert.equal((await request("/artigos/inexistente")).response.status, 404);
+  failure = new Error("offline");
+  assert.equal((await withoutErrorNoise(() => request("/artigos"))).response.status, 503);
+  failure = null;
 });
 
 for (const {name, run} of scenarios) {

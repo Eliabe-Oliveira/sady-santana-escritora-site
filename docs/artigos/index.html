@@ -6,6 +6,7 @@
   <meta name="description" content="Artigos e reflexões de Sady Santana sobre fé cristã, feminilidade bíblica, família e cultura.">
   <link rel="canonical" href="https://eliabe-oliveira.github.io/sady-santana-escritora-site/artigos/">
   <meta property="og:title" content="Artigos | Sady Santana"><meta property="og:description" content="Reflexões para viver e discernir o tempo à luz das Escrituras."><meta property="og:type" content="website">
+  <script>document.documentElement.classList.add("js");</script>
   <style>@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap");
 
 :root {
@@ -426,6 +427,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   border-radius: 50%; right: -80px; bottom: -230px; box-shadow: 0 0 0 70px rgba(75,32,40,.025), 0 0 0 140px rgba(75,32,40,.018);
 }
 .articles-hero h1 { font-size: clamp(58px, 7.5vw, 112px); line-height: .93; letter-spacing: -.05em; margin: 28px 0 35px; max-width: 970px; }
+.articles-hero h1 > span { display: block; }
 .articles-hero h1 em { display: block; color: var(--rose); font-weight: 500; }
 .articles-hero > p:last-child { max-width: 560px; font: 18px/1.75 "Playfair Display", serif; color: var(--muted); }
 .articles-library { padding: 120px 9vw; display: grid; grid-template-columns: minmax(260px, 34%) minmax(0, 1fr); gap: 7vw; max-width: 1500px; margin: auto; }
@@ -433,19 +435,40 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .articles-intro h2 { font-size: clamp(36px, 4vw, 58px); line-height: 1.08; margin: 19px 0 28px; }
 .articles-intro > p:last-child { color: var(--muted); line-height: 1.8; font-size: 14px; max-width: 360px; }
 .articles-list { border-top: 1px solid var(--line); }
-.article-row { display: grid; grid-template-columns: 55px 1fr 35px; gap: 25px; align-items: center; padding: 46px 10px; border-bottom: 1px solid var(--line); transition: padding .3s, background .3s; }
-.article-row:hover { padding-left: 24px; padding-right: 24px; background: var(--ivory); }
+.article-row { display: grid; grid-template-columns: 55px 1fr 35px; gap: 25px; align-items: center; padding: 46px 10px; border-bottom: 1px solid var(--line); position: relative; transition: background-color var(--motion-component) var(--ease-soft); }
+.article-row::after { content: ""; position: absolute; inset: auto 0 -1px; border-bottom: 1px solid var(--rose); transform: scaleX(0); transform-origin: right; transition: transform var(--motion-component) var(--ease-editorial); }
+.article-row > div, .article-row > b, .article-number { transition: transform var(--motion-micro) var(--ease-out), color var(--motion-micro) var(--ease-out), opacity var(--motion-micro) var(--ease-out); }
 .article-number { color: var(--rose); font-size: 10px; letter-spacing: .12em; }
 .article-row p { margin: 0 0 12px; color: var(--rose); text-transform: uppercase; font-size: 9px; letter-spacing: .18em; }
 .article-row h3 { margin: 0 0 13px; font-size: clamp(25px, 2.7vw, 38px); line-height: 1.2; }
 .article-row small { color: var(--muted); font-size: 12px; line-height: 1.6; }
 .article-row b { font-size: 23px; font-weight: 300; color: var(--rose); }
+@media (hover: hover) and (pointer: fine) {
+  .article-row:hover, .article-row:focus-within { background: var(--ivory); }
+  .article-row:hover::after, .article-row:focus-within::after { transform: scaleX(1); transform-origin: left; }
+  .article-row:hover > div, .article-row:focus-within > div { transform: translateX(5px); }
+  .article-row:hover > b, .article-row:focus-within > b { transform: translate(3px, -3px); }
+  .article-row:hover .article-number, .article-row:focus-within .article-number { color: var(--burgundy); transform: translateX(2px); }
+  .article-row:hover h3, .article-row:focus-within h3 { color: var(--burgundy); }
+}
 .articles-signup { background: var(--burgundy); color: white; padding: 105px 9vw; display: grid; grid-template-columns: 120px 1fr 1fr; gap: 5vw; align-items: center; }
 .signup-ornament { align-self: stretch; border-right: 1px solid rgba(255,255,255,.16); display: flex; flex-direction: column; justify-content: space-between; padding-right: 35px; }
 .signup-ornament > span:last-child { writing-mode: vertical-rl; transform: rotate(180deg); text-transform: uppercase; font-size: 8px; letter-spacing: .23em; color: var(--rose-soft); }
 .signup-copy h2 { font-size: clamp(39px, 4.6vw, 68px); line-height: 1.04; margin: 19px 0 28px; }
 .signup-copy > p:last-child { max-width: 480px; color: #c7b5b6; line-height: 1.75; font-size: 13px; }
 .articles-form { justify-self: end; }
+
+.motion-ready .editorial-sequence.reveal { opacity: 1; transform: none; }
+.motion-ready .editorial-sequence [data-editorial-item] { transition: opacity var(--motion-section) var(--ease-editorial), transform var(--motion-section) var(--ease-editorial); }
+.motion-ready .editorial-sequence:not(.visible) [data-editorial-item] { opacity: 0; transform: translateY(18px); }
+.motion-ready [data-editorial-sequence="archive-hero"] [data-editorial-item="title"] { transition-delay: var(--motion-stagger); }
+.motion-ready [data-editorial-sequence="archive-hero"] [data-editorial-item="emphasis"] { transition-delay: calc(var(--motion-stagger) * 2); }
+.motion-ready [data-editorial-sequence="archive-hero"] [data-editorial-item="copy"] { transition-delay: calc(var(--motion-stagger) * 3); }
+.motion-ready [data-editorial-sequence="archive-intro"] [data-editorial-item="title"] { transition-delay: var(--motion-stagger); }
+.motion-ready [data-editorial-sequence="archive-intro"] [data-editorial-item="copy"] { transition-delay: calc(var(--motion-stagger) * 2); }
+.motion-ready .article-header [data-editorial-item="title"] { transition-delay: 140ms; }
+.motion-ready .article-header [data-editorial-item="copy"] { transition-delay: 280ms; }
+.motion-ready .article-header [data-editorial-item="meta"] { transition-delay: 420ms; }
 
 @media (max-width: 900px) {
   :root { --motion-stagger: 55ms; --distance-reveal: 14px; --distance-reveal-inline: 12px; }
@@ -510,6 +533,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .newsletter { padding: 75px 7vw; }
   .articles-hero { padding: 90px 7vw 75px; min-height: 520px; }
   .articles-hero h1 { font-size: 55px; }
+  .motion-ready .editorial-sequence:not(.visible) [data-editorial-item] { transform: translateY(10px); }
   .article-row { grid-template-columns: 35px 1fr; gap: 15px; padding: 35px 0; }
   .article-row b { display: none; }
   .corner-garden { opacity: .26; }
@@ -520,7 +544,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
-  .reveal, .motion-ready .reveal, .motion-ready .reveal:not(.visible), .motion-ready .hero [data-hero-item], .motion-ready .hero-image, .motion-ready .chapter [data-chapter-item], .motion-ready .chapter [data-closing-item], .motion-ready .video-note [data-video-item], .book-card, .book-art, .book-info, .book-info [data-book-detail] { opacity: 1; transform: none; clip-path: none; animation: none; transition: none; }
+  .reveal, .motion-ready .reveal, .motion-ready .reveal:not(.visible), .motion-ready .hero [data-hero-item], .motion-ready .hero-image, .motion-ready .chapter [data-chapter-item], .motion-ready .chapter [data-closing-item], .motion-ready .video-note [data-video-item], .motion-ready .editorial-sequence [data-editorial-item], .book-card, .book-art, .book-info, .book-info [data-book-detail], .article-cover-enter { opacity: 1; transform: none; clip-path: none; animation: none; transition: none; }
   .book-art.vestido { transform: rotate(-2deg); }
   .book-art.feminilidade { transform: rotate(1.5deg); }
   .grass, .rooted-tulip { transform: rotate(var(--base-angle)) !important; transition: none !important; }
@@ -545,16 +569,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   <nav aria-label="Navegação principal"><a href="/sady-santana-escritora-site/#sobre">Sobre</a><a href="/sady-santana-escritora-site/#livros">Livros</a><a href="/sady-santana-escritora-site/#palestras">Palestras</a><a href="/sady-santana-escritora-site/artigos/" aria-current="page">Artigos</a><a class="nav-cta" href="#cartas">Cartas de Sady <span>↗</span></a></nav>
 </header>
 <main id="conteudo">
-  <section class="articles-hero">
-    <p class="section-index">Escritos · fé & cotidiano</p>
-    <h1>Palavras para<br><em>discernir o tempo.</em></h1>
-    <p>Reflexões sobre feminilidade bíblica, família, cultura e a beleza de uma vida orientada pela verdade.</p>
+  <section class="articles-hero editorial-sequence reveal" data-editorial-sequence="archive-hero">
+    <p class="section-index" data-editorial-item="index">Escritos · fé & cotidiano</p>
+    <h1><span data-editorial-item="title">Palavras para</span><em data-editorial-item="emphasis">discernir o tempo.</em></h1>
+    <p data-editorial-item="copy">Reflexões sobre feminilidade bíblica, família, cultura e a beleza de uma vida orientada pela verdade.</p>
   </section>
   <section class="articles-library">
-    <div class="articles-intro reveal"><p class="kicker">Acervo público</p><h2>Leia com calma.<br>Leve a verdade consigo.</h2><p>Reunimos aqui os textos de autoria publicamente identificada. Novos artigos poderão ser publicados diretamente neste espaço.</p></div>
+    <div class="articles-intro editorial-sequence reveal" data-editorial-sequence="archive-intro"><p class="kicker" data-editorial-item="index">Acervo público</p><h2 data-editorial-item="title">Leia com calma.<br>Leve a verdade consigo.</h2><p data-editorial-item="copy">Reunimos aqui os textos de autoria publicamente identificada. Novos artigos poderão ser publicados diretamente neste espaço.</p></div>
     <div class="articles-list">
-      <a class="article-row reveal" href="https://primeiraigrejavirtual.com.br/2015/11/11/mulher-crista-redes-sociais/" target="_blank" rel="noreferrer"><span class="article-number">01</span><div><p>Mulher & cultura digital</p><h3>Da vida “sem véu” à exposição “sem filtro”</h3><small>Uma reflexão sobre influência, modéstia e identidade cristã nas redes sociais.</small></div><b>↗</b></a>
-      <a class="article-row reveal" href="https://goodprime.co/voce-esta-preparando-seu-filho-para-o-que-vem-a-seguir/" target="_blank" rel="noreferrer"><span class="article-number">02</span><div><p>Família & cosmovisão</p><h3>Você está preparando seu filho para o que vem a seguir?</h3><small>Um chamado à responsabilidade dos pais na formação espiritual e cultural dos filhos.</small></div><b>↗</b></a>
+      <a class="article-row reveal" data-reveal="soft" data-delay="1" href="https://primeiraigrejavirtual.com.br/2015/11/11/mulher-crista-redes-sociais/" target="_blank" rel="noreferrer"><span class="article-number">01</span><div><p>Mulher & cultura digital</p><h3>Da vida “sem véu” à exposição “sem filtro”</h3><small>Uma reflexão sobre influência, modéstia e identidade cristã nas redes sociais.</small></div><b>↗</b></a>
+      <a class="article-row reveal" data-reveal="soft" data-delay="2" href="https://goodprime.co/voce-esta-preparando-seu-filho-para-o-que-vem-a-seguir/" target="_blank" rel="noreferrer"><span class="article-number">02</span><div><p>Família & cosmovisão</p><h3>Você está preparando seu filho para o que vem a seguir?</h3><small>Um chamado à responsabilidade dos pais na formação espiritual e cultural dos filhos.</small></div><b>↗</b></a>
     </div>
   </section>
   <section class="articles-signup" id="cartas">
@@ -564,142 +588,34 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   </section>
 </main>
 <footer><a class="brand footer-brand" href="/sady-santana-escritora-site/"><span class="leaf-mark light"><i></i><i></i><i></i><i></i><b></b></span><span><strong>Sady Santana</strong><small>escritora</small></span></a><p>Site-conceito criado a partir de informações públicas.</p><div><a href="/sady-santana-escritora-site/">Início</a><a href="/sady-santana-escritora-site/#livros">Livros</a><a href="#cartas">Cartas de Sady</a><a href="#conteudo">↑</a></div></footer>
-<script>const menuButton = document.querySelector(".menu-button");
-const primaryNav = document.querySelector(".site-header nav");
-if (menuButton && primaryNav) {
-  menuButton.addEventListener("click", function () {
-    const open = primaryNav.classList.toggle("open");
-    this.setAttribute("aria-expanded", String(open));
-    this.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
-  });
-  primaryNav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
-    primaryNav.classList.remove("open");
-    menuButton.setAttribute("aria-expanded", "false");
-    menuButton.setAttribute("aria-label", "Abrir menu");
-  }));
-}
-
-const books = {
-  vestido: {
-    eyebrow: "Romance cristão · 2022",
-    title: "O vestido nunca usado",
-    subtitle: "",
-    description: "Uma história de amor bordada por relacionamentos, piedade, paixão e graça — e por um vestido carregado de significado. O romance aponta, em sua essência, para a maior história de amor de todos os tempos.",
-    meta: ["GodBooks", "224 páginas", "ISBN 978-65-89198-45-1"],
-    cover: window.BOOK_COVERS && window.BOOK_COVERS.vestido,
-    coverAlt: "Capa do livro O vestido nunca usado, de Sady Santana",
-    link: "https://godbooks.com.br/product/o-vestido-nunca-usado/",
-    cta: "Conhecer o livro"
-  },
-  feminilidade: {
-    eyebrow: "Não ficção cristã",
-    title: "Feminilidade Bíblica",
-    subtitle: "Repensando o papel da mulher à luz de Cantares",
-    description: "Uma reflexão sobre identidade, vocação e o papel da mulher cristã a partir das Escrituras, mencionada na biografia pública da autora.",
-    meta: ["Feminilidade", "Cantares", "Vida cristã"],
-    cover: window.BOOK_COVERS && window.BOOK_COVERS.feminilidade,
-    coverAlt: "Capa do livro Feminilidade Bíblica, de Sady Santana Ferreira",
-    link: "https://goodprime.co/e-dai-o-malabarismo-hermeneutico-da-imprensa-para-desmoralizar-o-presidente/",
-    cta: "Ver referência"
-  }
-};
-const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
-const bookTabs = Array.from(document.querySelectorAll('.book-selector [role="tab"]'));
-const bookPanel = document.querySelector("#book-panel");
-const bookTransition = {
-  displayed: "vestido",
-  requested: "vestido",
-  timers: new Set(),
-  cancel() {
-    this.timers.forEach((timer) => window.clearTimeout(timer));
-    this.timers.clear();
-  },
-  schedule(callback, delay) {
-    const timer = window.setTimeout(() => {
-      this.timers.delete(timer);
-      callback();
-    }, delay);
-    this.timers.add(timer);
-  },
-  update(id) {
-    const book = books[id];
-    const art = bookPanel.querySelector(".book-art");
-    art.className = "book-art " + id;
-    const cover = art.querySelector("img");
-    cover.src = book.cover;
-    cover.alt = book.coverAlt;
-    bookPanel.querySelector(".book-info .kicker").textContent = book.eyebrow;
-    bookPanel.querySelector(".book-info h3").textContent = book.title;
-    const subtitle = bookPanel.querySelector(".book-info .subtitle");
-    subtitle.textContent = book.subtitle;
-    subtitle.hidden = !book.subtitle;
-    bookPanel.querySelector(".book-description").textContent = book.description;
-    const meta = bookPanel.querySelector(".book-info ul");
-    meta.replaceChildren(...book.meta.map((value) => {
-      const item = document.createElement("li");
-      item.textContent = value;
-      return item;
-    }));
-    const link = bookPanel.querySelector(".book-info .button");
-    link.href = book.link;
-    link.firstChild.textContent = book.cta + " ";
-    this.displayed = id;
-  },
-  select(id) {
-    if (!books[id] || !bookPanel) return;
-    this.cancel();
-    this.requested = id;
-    bookTabs.forEach((tab) => {
-      const selected = tab.dataset.book === id;
-      tab.setAttribute("aria-selected", String(selected));
-      tab.tabIndex = selected ? 0 : -1;
-    });
-    bookPanel.setAttribute("aria-labelledby", "book-tab-" + id);
-    if (motionPreference.matches || id === this.displayed) {
-      if (id !== this.displayed) this.update(id);
-      bookPanel.className = "book-card reveal visible is-idle";
-      bookPanel.setAttribute("aria-busy", "false");
-      return;
-    }
-    bookPanel.className = "book-card reveal visible is-leaving";
-    bookPanel.setAttribute("aria-busy", "true");
-    this.schedule(() => {
-      this.update(this.requested);
-      bookPanel.className = "book-card reveal visible is-entering";
-      this.schedule(() => {
-        bookPanel.className = "book-card reveal visible is-idle";
-        bookPanel.setAttribute("aria-busy", "false");
-      }, 360);
-    }, 200);
-  }
-};
-
-bookTabs.forEach((button, index) => {
-  button.addEventListener("click", () => bookTransition.select(button.dataset.book));
-  button.addEventListener("keydown", (event) => {
-    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-    event.preventDefault();
-    const nextIndex = event.key === "Home" ? 0 : event.key === "End" ? bookTabs.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + bookTabs.length) % bookTabs.length;
-    bookTabs[nextIndex].focus();
-    bookTransition.select(bookTabs[nextIndex].dataset.book);
-  });
-});
-if (motionPreference.addEventListener) {
-  motionPreference.addEventListener("change", () => {
-    if (motionPreference.matches) bookTransition.select(bookTransition.requested);
-  });
-}
-
+<script>const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
 const reduceMotion = motionPreference.matches;
+
+document.querySelectorAll(".menu-button").forEach((button) => {
+  const header = button.closest(".site-header");
+  const nav = header && header.querySelector("nav");
+  if (!nav) return;
+  button.addEventListener("click", () => {
+    const open = nav.classList.toggle("open");
+    button.setAttribute("aria-expanded", String(open));
+    button.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+  });
+  nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
+    nav.classList.remove("open");
+    button.setAttribute("aria-expanded", "false");
+    button.setAttribute("aria-label", "Abrir menu");
+  }));
+});
+
 if ("IntersectionObserver" in window && !reduceMotion) {
   const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
     if (entry.isIntersecting) {
       entry.target.classList.add("visible");
       observer.unobserve(entry.target);
     }
-  }), { threshold: .12, rootMargin: "0px 0px -6%" });
+  }), {threshold: .12, rootMargin: "0px 0px -6%"});
   document.documentElement.classList.add("motion-ready");
-  document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+  document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
 } else {
   document.documentElement.classList.remove("motion-ready");
 }
@@ -714,35 +630,34 @@ const requestHeaderUpdate = () => {
   if (!headerFrame) headerFrame = window.requestAnimationFrame(updateHeader);
 };
 updateHeader();
-window.addEventListener("scroll", requestHeaderUpdate, { passive: true });
+window.addEventListener("scroll", requestHeaderUpdate, {passive: true});
 
-const gardens = document.querySelectorAll(".corner-garden");
-let lastScroll = window.scrollY;
-let windTimer = null;
-let gardenFrame = 0;
-if (!reduceMotion) {
-  const updateGardens = () => {
-    gardenFrame = 0;
-    const current = window.scrollY;
-    const velocity = Math.max(-1, Math.min(1, (current - lastScroll) / 36));
-    lastScroll = current;
-    gardens.forEach((garden, index) => {
-      const direction = index === 0 ? 1 : -1;
-      garden.style.setProperty("--wind", velocity * 11 * direction + "deg");
-      garden.classList.add("wind-active");
-    });
-    clearTimeout(windTimer);
-    windTimer = setTimeout(() => {
-      gardens.forEach((garden) => {
-        garden.style.setProperty("--wind", "0deg");
-        garden.classList.remove("wind-active");
-      });
-    }, 140);
-  };
-  window.addEventListener("scroll", () => {
-    if (!gardenFrame) gardenFrame = window.requestAnimationFrame(updateGardens);
-  }, { passive: true });
-}
+document.querySelectorAll("[data-copy-link]").forEach((button) => {
+  button.addEventListener("click", async () => {
+    const status = document.getElementById(button.getAttribute("aria-describedby"));
+    let copied = false;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(window.location.href);
+        copied = true;
+      } else {
+        const field = document.createElement("textarea");
+        field.value = window.location.href;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.opacity = "0";
+        document.body.appendChild(field);
+        field.select();
+        copied = document.execCommand("copy");
+        field.remove();
+      }
+    } catch {
+      copied = false;
+    }
+    button.textContent = copied ? "Link copiado" : "Não foi possível copiar";
+    if (status) status.textContent = copied ? "Link copiado para a área de transferência." : "Não foi possível copiar o link automaticamente.";
+  });
+});
 </script>
 </body>
 </html>
