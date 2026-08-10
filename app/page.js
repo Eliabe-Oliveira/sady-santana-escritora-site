@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 const books = [
@@ -13,6 +13,8 @@ const books = [
     meta: ["GodBooks", "224 páginas", "ISBN 978-65-89198-45-1"],
     link: "https://godbooks.com.br/product/o-vestido-nunca-usado/",
     cta: "Conhecer o livro",
+    cover: "/o-vestido-nunca-usado-capa.jpg",
+    coverAlt: "Capa do livro O vestido nunca usado, de Sady Santana",
   },
   {
     id: "feminilidade",
@@ -24,6 +26,8 @@ const books = [
     meta: ["Feminilidade", "Cantares", "Vida cristã"],
     link: "https://goodprime.co/e-dai-o-malabarismo-hermeneutico-da-imprensa-para-desmoralizar-o-presidente/",
     cta: "Ver referência",
+    cover: "/feminilidade-biblica-capa.jpg",
+    coverAlt: "Capa do livro Feminilidade Bíblica, de Sady Santana Ferreira",
   },
 ];
 
@@ -73,6 +77,10 @@ function Arrow({ down = false }) {
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeBook, setActiveBook] = useState("vestido");
+  const [requestedBook, setRequestedBook] = useState("vestido");
+  const [bookPhase, setBookPhase] = useState("idle");
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const tabRefs = useRef([]);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -94,6 +102,39 @@ export default function Home() {
     document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setReduceMotion(media.matches);
+    updatePreference();
+    media.addEventListener?.("change", updatePreference);
+    return () => media.removeEventListener?.("change", updatePreference);
+  }, []);
+
+  useEffect(() => {
+    if (requestedBook === activeBook) {
+      setBookPhase("idle");
+      return undefined;
+    }
+    if (reduceMotion) {
+      setActiveBook(requestedBook);
+      setBookPhase("idle");
+      return undefined;
+    }
+
+    let enterTimer;
+    setBookPhase("leaving");
+    const leaveTimer = window.setTimeout(() => {
+      setActiveBook(requestedBook);
+      setBookPhase("entering");
+      enterTimer = window.setTimeout(() => setBookPhase("idle"), 360);
+    }, 200);
+
+    return () => {
+      window.clearTimeout(leaveTimer);
+      window.clearTimeout(enterTimer);
+    };
+  }, [requestedBook, reduceMotion]);
 
   useEffect(() => {
     const header = document.querySelector(".site-header");
@@ -207,8 +248,8 @@ export default function Home() {
           <p className="quote-source reveal" data-reveal="soft" data-delay="3">— O vestido nunca usado</p>
         </section>
 
-        <section className="about" id="sobre">
-          <figure className="about-portrait reveal">
+        <section className="about chapter reveal" data-chapter="about" id="sobre">
+          <figure className="about-portrait" data-chapter-item="portrait">
             <Image
               src="/sady-santana-biografia.jpg"
               alt="Sady Santana sorrindo"
@@ -216,38 +257,38 @@ export default function Home() {
               height={1080}
               sizes="(max-width: 900px) 86vw, 34vw"
             />
-            <figcaption>
+            <figcaption data-chapter-item="caption">
               <span>Sobre Sady</span>
               <p>Escrever é também um modo de servir.</p>
             </figcaption>
           </figure>
-          <div className="about-copy reveal">
-            <p className="kicker">Jornalismo, teologia & literatura</p>
-            <h2>Uma escrita que nasce da fé e encontra o cotidiano.</h2>
+          <div className="about-copy">
+            <p className="kicker" data-chapter-item="kicker">Jornalismo, teologia & literatura</p>
+            <h2 data-chapter-item="title">Uma escrita que nasce da fé e encontra o cotidiano.</h2>
             <div className="columns">
-              <p>
+              <p data-chapter-item="column-1">
                 Sady Santana é jornalista formada pela Universidade
                 Presbiteriana Mackenzie. Estudou Teologia no Instituto Bíblico
                 Eduardo Lane (IBEL), onde aprofundou seu amor por missões e pela
                 Igreja.
               </p>
-              <p>
+              <p data-chapter-item="column-2">
                 Escritora, esposa do pastor presbiteriano Nelson Ferreira, mãe
                 e avó, sua voz pública percorre temas como feminilidade bíblica,
                 família, cultura e graça — com o olhar de quem reconhece a
                 soberania de Deus em cada história.
               </p>
             </div>
-            <div className="facts" aria-label="Informações sobre a autora">
-              <div>
+            <div className="facts" data-chapter-item="facts" aria-label="Informações sobre a autora">
+              <div data-chapter-item="fact-1">
                 <strong>Mackenzie</strong>
                 <span>Formação em Jornalismo</span>
               </div>
-              <div>
+              <div data-chapter-item="fact-2">
                 <strong>IBEL</strong>
                 <span>Estudos em Teologia</span>
               </div>
-              <div>
+              <div data-chapter-item="fact-3">
                 <strong>02</strong>
                 <span>Obras identificadas</span>
               </div>
@@ -256,24 +297,37 @@ export default function Home() {
         </section>
 
         <section className="books" id="livros">
-          <div className="section-heading reveal">
+          <div className="section-heading books-heading reveal">
             <div>
-              <p className="section-index">02 · biblioteca</p>
-              <h2>Livros para ler<br />com o coração desperto.</h2>
+              <p className="section-index reveal" data-reveal="soft">02 · biblioteca</p>
+              <h2 className="reveal" data-delay="1">Livros para ler<br />com o coração desperto.</h2>
             </div>
-            <p>
+            <p className="reveal" data-reveal="soft" data-delay="2">
               Ficção e reflexão bíblica se encontram em páginas sobre amor,
               identidade, piedade e graça.
             </p>
           </div>
 
-          <div className="book-selector reveal" role="tablist" aria-label="Livros">
-            {books.map((item) => (
+          <div className="book-selector reveal" data-delay="3" role="tablist" aria-label="Livros publicados">
+            {books.map((item, index) => (
               <button
                 key={item.id}
+                ref={(node) => { tabRefs.current[index] = node; }}
+                id={`book-tab-${item.id}`}
                 role="tab"
-                aria-selected={activeBook === item.id}
-                onClick={() => setActiveBook(item.id)}
+                type="button"
+                tabIndex={requestedBook === item.id ? 0 : -1}
+                aria-selected={requestedBook === item.id}
+                aria-controls="book-panel"
+                onClick={() => setRequestedBook(item.id)}
+                onKeyDown={(event) => {
+                  const keys = ["ArrowLeft", "ArrowRight", "Home", "End"];
+                  if (!keys.includes(event.key)) return;
+                  event.preventDefault();
+                  const nextIndex = event.key === "Home" ? 0 : event.key === "End" ? books.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + books.length) % books.length;
+                  setRequestedBook(books[nextIndex].id);
+                  tabRefs.current[nextIndex]?.focus();
+                }}
               >
                 <span>{item.id === "vestido" ? "01" : "02"}</span>
                 {item.title}
@@ -281,25 +335,26 @@ export default function Home() {
             ))}
           </div>
 
-          <article className="book-card reveal" key={book.id}>
-            <div className={`book-art ${book.id}`}>
-              <span className="book-label">Sady Santana</span>
-              <div>
-                <i />
-                <strong>{book.title}</strong>
-                {book.subtitle && <small>{book.subtitle}</small>}
-              </div>
-              <span className="book-publisher">literatura cristã</span>
+          <article
+            className={`book-card reveal is-${bookPhase}`}
+            data-delay="4"
+            id="book-panel"
+            role="tabpanel"
+            aria-labelledby={`book-tab-${requestedBook}`}
+            aria-live="polite"
+            aria-busy={bookPhase !== "idle"}
+          >
+            <div className={`book-art ${book.id}`} data-book-part="cover">
+              <Image src={book.cover} alt={book.coverAlt} width={650} height={1000} sizes="(max-width: 560px) 270px, 325px" />
             </div>
-            <div className="book-info">
-              <p className="kicker">{book.eyebrow}</p>
-              <h3>{book.title}</h3>
-              {book.subtitle && <p className="subtitle">{book.subtitle}</p>}
-              <p>{book.description}</p>
-              <ul>
+            <div className="book-info" data-book-part="info">
+              <p className="kicker" data-book-detail="kicker">{book.eyebrow}</p>
+              <div data-book-detail="title"><h3>{book.title}</h3>{book.subtitle && <p className="subtitle">{book.subtitle}</p>}</div>
+              <p data-book-detail="description">{book.description}</p>
+              <ul data-book-detail="meta">
                 {book.meta.map((item) => <li key={item}>{item}</li>)}
               </ul>
-              <a href={book.link} target="_blank" rel="noreferrer" className="button dark">
+              <a href={book.link} target="_blank" rel="noreferrer" className="button dark" data-book-detail="cta">
                 {book.cta} <Arrow />
               </a>
             </div>
@@ -307,7 +362,7 @@ export default function Home() {
         </section>
 
         <section className="talks" id="palestras">
-          <div className="section-heading light reveal">
+          <div className="section-heading light reveal" data-reveal="soft">
             <div>
               <p className="section-index">03 · conversas & palestras</p>
               <h2>Verdade que alcança<br />a vida real.</h2>
@@ -319,8 +374,8 @@ export default function Home() {
           </div>
 
           <div className="theme-list">
-            {themes.map((theme) => (
-              <article className="theme reveal" key={theme.number}>
+            {themes.map((theme, index) => (
+              <article className="theme reveal" data-delay={String(index + 1)} key={theme.number}>
                 <span>{theme.number}</span>
                 <div>
                   <h3>{theme.title}</h3>
@@ -331,12 +386,12 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="video-note reveal">
-            <div className="play-icon" aria-hidden="true">▶</div>
+          <div className="video-note reveal" data-reveal="soft">
+            <div className="play-icon" data-video-item="icon" aria-hidden="true">▶</div>
             <div>
-              <p className="kicker">Acervo em construção</p>
-              <h3>Palestras em vídeo</h3>
-              <p>
+              <p className="kicker" data-video-item="kicker">Acervo em construção</p>
+              <h3 data-video-item="title">Palestras em vídeo</h3>
+              <p data-video-item="copy">
                 Não localizamos, até julho de 2026, uma gravação pública
                 verificável de palestra individual de Sady Santana no YouTube.
                 Este espaço está preparado para receber o conteúdo oficial.
@@ -360,19 +415,20 @@ export default function Home() {
           </a>
         </section>
 
-        <section className="newsletter" id="contato">
-          <LeafMark light />
-          <div className="newsletter-copy reveal">
-            <p className="kicker">Cartas de Sady</p>
-            <h2>Palavras de fé,<br />de tempos em tempos.</h2>
-            <p>
+        <section className="newsletter chapter reveal" data-chapter="closing" id="contato">
+          <span data-closing-item="ornament"><LeafMark light /></span>
+          <div className="newsletter-copy">
+            <p className="kicker" data-closing-item="kicker">Cartas de Sady</p>
+            <h2 data-closing-item="title">Palavras de fé,<br />de tempos em tempos.</h2>
+            <p data-closing-item="copy">
               Este formulário é uma demonstração interativa. Conecte uma
               plataforma de e-mail para transformá-lo em uma lista real.
             </p>
           </div>
-          <div className="subscribe-form reveal">
-            <p role="status">A lista de e-mails será integrada em uma etapa futura.</p>
-            <small>Os artigos já podem ser lidos sem cadastro.</small>
+          <div className="subscribe-form">
+            <p role="status" data-closing-item="status">A lista de e-mails será integrada em uma etapa futura.</p>
+            <a className="button newsletter-button" data-closing-item="cta" href="/artigos">Ler os artigos</a>
+            <small data-closing-item="note">Os artigos já podem ser lidos sem cadastro.</small>
           </div>
         </section>
       </main>

@@ -244,6 +244,55 @@ scenario("mantém a fundação de motion progressiva e acessível", async () => 
   assert.doesNotMatch(packageJson, /gsap|framer-motion|animejs|locomotive-scroll/);
 });
 
+scenario("preserva tokens e documenta os padrões editoriais", async () => {
+  const [css, motion] = await Promise.all([
+    readFile("app/globals.css", "utf8"),
+    readFile("MOTION_SYSTEM.md", "utf8"),
+  ]);
+  for (const token of [
+    "--motion-micro: 220ms", "--motion-component: 360ms", "--motion-section: 680ms",
+    "--motion-stagger: 90ms", "--distance-reveal: 24px", "--distance-reveal-inline: 18px",
+  ]) assert.match(css, new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  assert.match(motion, /## Padrões aplicados/);
+  assert.match(motion, /\*\*Sobre:\*\*[\s\S]*\*\*Livros:\*\*[\s\S]*\*\*Palestras:\*\*[\s\S]*\*\*Fechamento:\*\*/);
+});
+
+scenario("oferece tabs de livros acessíveis e troca determinística", async () => {
+  const [home, app, script, css] = await Promise.all([
+    readFile("static/index.html", "utf8"),
+    readFile("app/page.js", "utf8"),
+    readFile("static/site.js", "utf8"),
+    readFile("app/globals.css", "utf8"),
+  ]);
+  assert.match(home, /role="tablist"[^>]+aria-label="Livros publicados"/);
+  assert.equal((home.match(/role="tab"/g) || []).length, 2);
+  assert.equal((home.match(/aria-controls="book-panel"/g) || []).length, 2);
+  assert.match(home, /role="tabpanel"[^>]+aria-live="polite"[^>]+aria-busy="false"/);
+  for (const key of ["ArrowLeft", "ArrowRight", "Home", "End"]) {
+    assert.match(script, new RegExp(key));
+    assert.match(app, new RegExp(key));
+  }
+  assert.match(script, /timers:\s*new Set\(\)/);
+  assert.match(script, /this\.cancel\(\)/);
+  assert.match(script, /motionPreference\.matches/);
+  assert.match(css, /\.book-card\.is-leaving/);
+  assert.match(css, /\.book-card\.is-entering/);
+});
+
+scenario("mantém novos capítulos progressivos sem tocar artigos", async () => {
+  const [home, css, articles] = await Promise.all([
+    readFile("static/index.html", "utf8"),
+    readFile("app/globals.css", "utf8"),
+    readFile("static/articles.html", "utf8"),
+  ]);
+  assert.match(home, /data-chapter="about"/);
+  assert.match(home, /data-chapter="closing"/);
+  assert.match(home, /class="theme reveal" data-delay="4"/);
+  assert.match(css, /\.motion-ready \.chapter\.reveal \{ opacity: 1; transform: none; \}/);
+  assert.match(css, /prefers-reduced-motion:[\s\S]*\.book-info \[data-book-detail\]/);
+  assert.doesNotMatch(articles, /data-chapter="about"|data-book-detail|data-video-item/);
+});
+
 for (const {name, run} of scenarios) {
   await run();
   console.log(`✓ ${name}`);
