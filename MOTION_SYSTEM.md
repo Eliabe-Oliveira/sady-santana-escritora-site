@@ -71,3 +71,12 @@ O observer revela uma única vez e remove a observação imediatamente. Sem Java
 ## Movimento reduzido
 
 Em `prefers-reduced-motion: reduce`, reveals, coreografia do hero, transições decorativas e vento das flores são desativados. O scroll volta a ser instantâneo e todo o conteúdo é exibido no estado final.
+
+## Padrões aplicados
+
+- **Sobre:** fotografia revelada como uma página, seguida por legenda, kicker, título, colunas, linha e fatos em uma sequência única de seção.
+- **Livros:** troca de ficha editorial em fases de saída, atualização e entrada; capa antecede os detalhes e cliques sucessivos cancelam a transição anterior.
+- **Palestras:** heading e linhas temáticas entram em stagger; em dispositivos com hover, cada linha responde apenas de modo ambiental.
+- **Fechamento:** ornamento, kicker, título, texto, status e chamada encerram a página em progressão silenciosa.
+
+Todos os padrões permanecem visíveis sem JavaScript ou sem `IntersectionObserver` e tornam-se imediatos com movimento reduzido.

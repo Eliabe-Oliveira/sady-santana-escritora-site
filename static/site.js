@@ -37,31 +37,94 @@ const books = {
     cta: "Ver referência"
   }
 };
-document.querySelectorAll(".book-selector button").forEach((button) => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".book-selector button").forEach((b) => b.setAttribute("aria-selected", "false"));
-    button.setAttribute("aria-selected", "true");
-    const id = button.dataset.book, book = books[id];
-    const art = document.querySelector(".book-art");
-    if (!art) return;
+const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+const bookTabs = Array.from(document.querySelectorAll('.book-selector [role="tab"]'));
+const bookPanel = document.querySelector("#book-panel");
+const bookTransition = {
+  displayed: "vestido",
+  requested: "vestido",
+  timers: new Set(),
+  cancel() {
+    this.timers.forEach((timer) => window.clearTimeout(timer));
+    this.timers.clear();
+  },
+  schedule(callback, delay) {
+    const timer = window.setTimeout(() => {
+      this.timers.delete(timer);
+      callback();
+    }, delay);
+    this.timers.add(timer);
+  },
+  update(id) {
+    const book = books[id];
+    const art = bookPanel.querySelector(".book-art");
     art.className = "book-art " + id;
     const cover = art.querySelector("img");
     cover.src = book.cover;
     cover.alt = book.coverAlt;
-    document.querySelector(".book-info .kicker").textContent = book.eyebrow;
-    document.querySelector(".book-info h3").textContent = book.title;
-    const subtitle = document.querySelector(".book-info .subtitle");
+    bookPanel.querySelector(".book-info .kicker").textContent = book.eyebrow;
+    bookPanel.querySelector(".book-info h3").textContent = book.title;
+    const subtitle = bookPanel.querySelector(".book-info .subtitle");
     subtitle.textContent = book.subtitle;
     subtitle.hidden = !book.subtitle;
-    document.querySelector(".book-description").textContent = book.description;
-    document.querySelector(".book-info ul").innerHTML = book.meta.map((m) => "<li>" + m + "</li>").join("");
-    const link = document.querySelector(".book-info .button");
+    bookPanel.querySelector(".book-description").textContent = book.description;
+    const meta = bookPanel.querySelector(".book-info ul");
+    meta.replaceChildren(...book.meta.map((value) => {
+      const item = document.createElement("li");
+      item.textContent = value;
+      return item;
+    }));
+    const link = bookPanel.querySelector(".book-info .button");
     link.href = book.link;
     link.firstChild.textContent = book.cta + " ";
+    this.displayed = id;
+  },
+  select(id) {
+    if (!books[id] || !bookPanel) return;
+    this.cancel();
+    this.requested = id;
+    bookTabs.forEach((tab) => {
+      const selected = tab.dataset.book === id;
+      tab.setAttribute("aria-selected", String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+    });
+    bookPanel.setAttribute("aria-labelledby", "book-tab-" + id);
+    if (motionPreference.matches || id === this.displayed) {
+      if (id !== this.displayed) this.update(id);
+      bookPanel.className = "book-card reveal visible is-idle";
+      bookPanel.setAttribute("aria-busy", "false");
+      return;
+    }
+    bookPanel.className = "book-card reveal visible is-leaving";
+    bookPanel.setAttribute("aria-busy", "true");
+    this.schedule(() => {
+      this.update(this.requested);
+      bookPanel.className = "book-card reveal visible is-entering";
+      this.schedule(() => {
+        bookPanel.className = "book-card reveal visible is-idle";
+        bookPanel.setAttribute("aria-busy", "false");
+      }, 360);
+    }, 200);
+  }
+};
+
+bookTabs.forEach((button, index) => {
+  button.addEventListener("click", () => bookTransition.select(button.dataset.book));
+  button.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const nextIndex = event.key === "Home" ? 0 : event.key === "End" ? bookTabs.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + bookTabs.length) % bookTabs.length;
+    bookTabs[nextIndex].focus();
+    bookTransition.select(bookTabs[nextIndex].dataset.book);
   });
 });
+if (motionPreference.addEventListener) {
+  motionPreference.addEventListener("change", () => {
+    if (motionPreference.matches) bookTransition.select(bookTransition.requested);
+  });
+}
 
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const reduceMotion = motionPreference.matches;
 if ("IntersectionObserver" in window && !reduceMotion) {
   const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
     if (entry.isIntersecting) {
