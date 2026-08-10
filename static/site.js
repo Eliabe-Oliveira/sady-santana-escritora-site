@@ -1,18 +1,3 @@
-const menuButton = document.querySelector(".menu-button");
-const primaryNav = document.querySelector(".site-header nav");
-if (menuButton && primaryNav) {
-  menuButton.addEventListener("click", function () {
-    const open = primaryNav.classList.toggle("open");
-    this.setAttribute("aria-expanded", String(open));
-    this.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
-  });
-  primaryNav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
-    primaryNav.classList.remove("open");
-    menuButton.setAttribute("aria-expanded", "false");
-    menuButton.setAttribute("aria-label", "Abrir menu");
-  }));
-}
-
 const books = {
   vestido: {
     eyebrow: "Romance cristão · 2022",
@@ -37,7 +22,6 @@ const books = {
     cta: "Ver referência"
   }
 };
-const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
 const bookTabs = Array.from(document.querySelectorAll('.book-selector [role="tab"]'));
 const bookPanel = document.querySelector("#book-panel");
 const bookTransition = {
@@ -123,32 +107,6 @@ if (motionPreference.addEventListener) {
     if (motionPreference.matches) bookTransition.select(bookTransition.requested);
   });
 }
-
-const reduceMotion = motionPreference.matches;
-if ("IntersectionObserver" in window && !reduceMotion) {
-  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("visible");
-      observer.unobserve(entry.target);
-    }
-  }), { threshold: .12, rootMargin: "0px 0px -6%" });
-  document.documentElement.classList.add("motion-ready");
-  document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-} else {
-  document.documentElement.classList.remove("motion-ready");
-}
-
-const siteHeader = document.querySelector(".site-header");
-let headerFrame = 0;
-const updateHeader = () => {
-  headerFrame = 0;
-  if (siteHeader) siteHeader.classList.toggle("is-scrolled", window.scrollY > 12);
-};
-const requestHeaderUpdate = () => {
-  if (!headerFrame) headerFrame = window.requestAnimationFrame(updateHeader);
-};
-updateHeader();
-window.addEventListener("scroll", requestHeaderUpdate, { passive: true });
 
 const gardens = document.querySelectorAll(".corner-garden");
 let lastScroll = window.scrollY;
