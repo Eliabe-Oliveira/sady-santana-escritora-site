@@ -91,25 +91,26 @@ scenario("oculta documentos que não atendem à publicação", async () => {
   for (const hidden of ["archived", "future", "no-body", "no-category"]) assert.doesNotMatch(page.body, new RegExp(`href="/artigos/${hidden}"`));
 });
 
-scenario("remove formulário de newsletter legado", async () => {
+scenario("mantém contato exclusivamente na Home", async () => {
   result = [valid];
   const page = await request("/artigos");
-  assert.doesNotMatch(page.body, /<form class="subscribe-form/);
-  assert.doesNotMatch(page.body, /Quero receber|type="email"/);
+  assert.doesNotMatch(page.body, /<form class="contact-form|action="mailto:sady287@gmail\.com/);
+  assert.doesNotMatch(page.body, /Cartas de Sady|articles-signup/);
 });
 
-scenario("mantém o catálogo na coluna correta do acervo", async () => {
+scenario("mantém o catálogo na largura editorial completa", async () => {
   result = [valid];
   const page = await request("/artigos");
   const library = page.body.match(/<section class="articles-library">([\s\S]*?)<\/section>/)?.[1] || "";
   assert.match(library, /class="article-tools"/);
   assert.match(library, /class="articles-list"/);
   assert.doesNotMatch(library, /article-cover-fallback/);
-  assert.match(page.body, /\.article-tools,\.articles-list,\.pagination\{grid-column:2\}/);
+  assert.match(page.body, /\.article-tools,\.articles-list,\.pagination\{width:100%\}/);
   assert.match(page.body, /\.articles-list\{min-width:0\}/);
-  assert.match(page.body, /@media\(max-width:900px\)\{\.article-tools,\.articles-list,\.pagination\{grid-column:1\}/);
+  assert.doesNotMatch(page.body, /grid-column:2|articles-intro|Leia com calma/);
   const css = await readFile("app/globals.css", "utf8");
-  assert.match(css, /grid-template-columns:\s*minmax\(260px, 34%\) minmax\(0, 1fr\)/);
+  assert.match(css, /\.articles-library \{ width: min\(100%, 1480px\); padding: 110px 5vw;/);
+  assert.match(css, /\.article-row h3 \{[^}]*font-size: clamp\(22px, 2\.1vw, 32px\)/);
 });
 
 scenario("define canonical e próxima página no acervo", async () => {
@@ -255,7 +256,7 @@ scenario("preserva tokens e documenta os padrões editoriais", async () => {
     "--motion-stagger: 90ms", "--distance-reveal: 24px", "--distance-reveal-inline: 18px",
   ]) assert.match(css, new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   assert.match(motion, /## Padrões aplicados/);
-  assert.match(motion, /\*\*Sobre:\*\*[\s\S]*\*\*Livros:\*\*[\s\S]*\*\*Palestras:\*\*[\s\S]*\*\*Fechamento:\*\*/);
+  assert.match(motion, /\*\*Sobre:\*\*[\s\S]*\*\*Livros:\*\*[\s\S]*\*\*Vídeo:\*\*[\s\S]*\*\*Fechamento:\*\*/);
 });
 
 scenario("oferece tabs de livros acessíveis e troca determinística", async () => {
@@ -288,10 +289,40 @@ scenario("mantém novos capítulos progressivos sem tocar artigos", async () => 
   ]);
   assert.match(home, /data-chapter="about"/);
   assert.match(home, /data-chapter="closing"/);
-  assert.match(home, /class="theme reveal" data-delay="4"/);
+  assert.doesNotMatch(home, /class="theme|theme-list|Verdade que alcança/);
+  assert.match(home, /youtube-nocookie\.com\/embed\/Engv2JRyjZc/);
   assert.match(css, /\.motion-ready \.chapter\.reveal \{ opacity: 1; transform: none; \}/);
   assert.match(css, /prefers-reduced-motion:[\s\S]*\.book-info \[data-book-detail\]/);
   assert.doesNotMatch(articles, /data-chapter="about"|data-book-detail|data-video-item/);
+});
+
+scenario("oferece contato mailto acessível e crédito editorial consistente", async () => {
+  const [home, app, script, archive, css, build] = await Promise.all([
+    readFile("static/index.html", "utf8"), readFile("app/page.js", "utf8"),
+    readFile("static/site.js", "utf8"), readFile("static/articles.html", "utf8"),
+    readFile("app/globals.css", "utf8"), readFile("build.mjs", "utf8"),
+  ]);
+  for (const source of [home, app]) {
+    assert.match(source, /mailto:sady287@gmail\.com/);
+    assert.match(source, /type="email" name="email" (?:autoComplete|autocomplete)="email" required/);
+    assert.match(source, /type="tel" name="phone" (?:autoComplete|autocomplete)="tel" required/);
+    assert.match(source, /textarea[^>]*name="message"[^>]*required/);
+    assert.match(source, /role="status" (?:ariaLive|aria-live)="polite"/);
+    assert.match(source, /Site desenvolvido pela Lumen Society\./);
+  }
+  for (const source of [script, app]) {
+    assert.match(source, /Convite pelo site — Sady Santana/);
+    assert.match(source, /encodeURIComponent\(subject\)/);
+    assert.match(source, /encodeURIComponent\(body\)/);
+    assert.match(source, /Seu aplicativo de e-mail será aberto para concluir o envio\./);
+  }
+  assert.doesNotMatch(`${home}\n${app}\n${script}`, /FormSubmit|EmailJS|SendGrid|Resend|SMTP/i);
+  assert.match(archive, /Site desenvolvido pela Lumen Society\./);
+  assert.doesNotMatch(archive, /contact-form|Cartas de Sady|articles-intro/);
+  assert.match(build, /Site desenvolvido pela Lumen Society\./);
+  assert.match(build, /\.article-detail h1\{font-size:clamp\(40px,5\.2vw,72px\);line-height:1\.06/);
+  assert.doesNotMatch(build, /grid-column:2/);
+  assert.match(css, /\.contact-form input:focus-visible, \.contact-form textarea:focus-visible/);
 });
 
 scenario("mantém as revisões editoriais da Home equivalentes em React e static", async () => {
@@ -335,7 +366,7 @@ scenario("aplica a coreografia editorial ao acervo sem layout shift", async () =
     readFile("static/articles.html", "utf8"),
   ]);
   assert.match(archive, /data-editorial-sequence="archive-hero"/);
-  assert.match(archive, /data-editorial-sequence="archive-intro"/);
+  assert.doesNotMatch(archive, /data-editorial-sequence="archive-intro"|articles-intro/);
   assert.equal((body.match(/class="article-row reveal" data-reveal="soft"/g) || []).length, 7);
   assert.match(body, /data-delay="4"/);
   assert.doesNotMatch(css, /transition:\s*padding/);
