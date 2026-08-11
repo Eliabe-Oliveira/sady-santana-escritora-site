@@ -294,6 +294,39 @@ scenario("mantém novos capítulos progressivos sem tocar artigos", async () => 
   assert.doesNotMatch(articles, /data-chapter="about"|data-book-detail|data-video-item/);
 });
 
+scenario("mantém as revisões editoriais da Home equivalentes em React e static", async () => {
+  const [app, home, script, css] = await Promise.all([
+    readFile("app/page.js", "utf8"),
+    readFile("static/index.html", "utf8"),
+    readFile("static/site.js", "utf8"),
+    readFile("app/globals.css", "utf8"),
+  ]);
+  const welcome = "Seja bem-vindo a este espaço. Entre histórias, reflexões e verdades eternas, que cada leitura fortaleça sua fé e aponte seu coração para Cristo.";
+  const amazon = "https://www.amazon.com.br/FEMINILIDADE-B%C3%8DBLICA-Repensando-mulher-Cantares-ebook/dp/B0D261ZZMM";
+  assert.match(app, /className="hero-author" data-hero-item="author">Sady Santana/);
+  assert.match(home, /class="hero-author" data-hero-item="author">Sady Santana/);
+  assert.match(app.replace(/\s+/g, " "), new RegExp(welcome));
+  assert.match(home, new RegExp(welcome));
+  assert.doesNotMatch(`${app}\n${home}\n${css}`, /hero-note|Uma vida de palavras/);
+  for (const source of [app, home]) {
+    assert.match(source.replace(/\s+/g, " "), /Sady Santana é escritora cristã presbiteriana,[\s\S]*?Centro Presbiteriano de Pós-Graduação Andrew Jumper \(CPAJ\)/);
+    assert.match(source.replace(/\s+/g, " "), /Autora de Feminilidade Bíblica e do romance O vestido nunca usado,[\s\S]*?à luz do evangelho\./);
+    for (const fact of ["Mackenzie", "IBEL", "CPAJ", "02"]) assert.match(source, new RegExp(`>${fact}<`));
+    assert.equal((source.match(/data-chapter-item=["']fact-[1-4]["']/g) || []).length, 4);
+  }
+  for (const source of [app, script]) {
+    assert.match(source, new RegExp(amazon.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.match(source, /Conhecer o livro/);
+  }
+  assert.match(app, /youtube-nocookie\.com\/embed\/Engv2JRyjZc/);
+  assert.match(home, /youtube-nocookie\.com\/embed\/Engv2JRyjZc/);
+  assert.match(home, /title="Vídeo em destaque de Sady Santana" loading="lazy"[\s\S]*allowfullscreen/);
+  assert.match(css, /\.facts \{[^}]*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/);
+  assert.match(css, /@media \(max-width: 900px\)[\s\S]*\.facts \{ grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(css, /\.video-frame \{[^}]*aspect-ratio: 16 \/ 9/);
+  assert.match(home, /"description":"Escritora cristã presbiteriana,[^"]*CPAJ\."/);
+});
+
 scenario("aplica a coreografia editorial ao acervo sem layout shift", async () => {
   result = Array.from({length: 7}, (_, index) => ({...valid, _id: `motion-${index}`, slug: `motion-${index}`, title: `Movimento ${index}`}));
   const [{body}, css, archive] = await Promise.all([

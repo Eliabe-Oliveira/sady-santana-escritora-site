@@ -24,8 +24,8 @@ const books = [
     description:
       "Uma reflexão sobre identidade, vocação e o papel da mulher cristã a partir das Escrituras, mencionada na biografia pública da autora.",
     meta: ["Feminilidade", "Cantares", "Vida cristã"],
-    link: "https://goodprime.co/e-dai-o-malabarismo-hermeneutico-da-imprensa-para-desmoralizar-o-presidente/",
-    cta: "Ver referência",
+    link: "https://www.amazon.com.br/FEMINILIDADE-B%C3%8DBLICA-Repensando-mulher-Cantares-ebook/dp/B0D261ZZMM",
+    cta: "Conhecer o livro",
     cover: "/feminilidade-biblica-capa.jpg",
     coverAlt: "Capa do livro Feminilidade Bíblica, de Sady Santana Ferreira",
   },
@@ -216,10 +216,11 @@ export default function Home() {
               <span data-hero-item="title">Palavras que</span>
               <em data-hero-item="emphasis">apontam para a graça.</em>
             </h1>
+            <p className="hero-author" data-hero-item="author">Sady Santana</p>
             <p className="hero-copy" data-hero-item="copy">
-              Jornalista e escritora cristã, Sady Santana escreve sobre a beleza
-              da fé vivida no cotidiano — entre histórias, afetos e a verdade
-              que permanece.
+              Seja bem-vindo a este espaço. Entre histórias, reflexões e
+              verdades eternas, que cada leitura fortaleça sua fé e aponte seu
+              coração para Cristo.
             </p>
             <div className="hero-actions" data-hero-item="actions">
               <a className="button primary" href="#livros">
@@ -229,13 +230,6 @@ export default function Home() {
                 Sobre a autora <Arrow />
               </a>
             </div>
-          </div>
-          <div className="hero-note" data-hero-item="note">
-            <LeafMark light />
-            <p>
-              <span>Uma vida de palavras</span>
-              a serviço da verdade.
-            </p>
           </div>
         </section>
 
@@ -267,16 +261,20 @@ export default function Home() {
             <h2 data-chapter-item="title">Uma escrita que nasce da fé e encontra o cotidiano.</h2>
             <div className="columns">
               <p data-chapter-item="column-1">
-                Sady Santana é jornalista formada pela Universidade
-                Presbiteriana Mackenzie. Estudou Teologia no Instituto Bíblico
-                Eduardo Lane (IBEL), onde aprofundou seu amor por missões e pela
-                Igreja.
+                Sady Santana é escritora cristã presbiteriana, jornalista
+                formada pela Universidade Presbiteriana Mackenzie e mestranda
+                em Teologia Filosófica pelo Centro Presbiteriano de Pós-Graduação
+                Andrew Jumper (CPAJ). É esposa, mãe e avó, e dedica parte de sua
+                caminhada ao ensino, ao discipulado de mulheres e à reflexão
+                sobre a vida cristã.
               </p>
               <p data-chapter-item="column-2">
-                Escritora, esposa do pastor presbiteriano Nelson Ferreira, mãe
-                e avó, sua voz pública percorre temas como feminilidade bíblica,
-                família, cultura e graça — com o olhar de quem reconhece a
-                soberania de Deus em cada história.
+                Autora de Feminilidade Bíblica e do romance O vestido nunca
+                usado, também colaborou com o Sistema Mackenzie de Ensino na
+                produção de material didático. Em sua escrita, busca unir fé,
+                reflexão bíblica e sensibilidade literária, abordando temas como
+                feminilidade, família, cultura, graça e as relações humanas à luz
+                do evangelho.
               </p>
             </div>
             <div className="facts" data-chapter-item="facts" aria-label="Informações sobre a autora">
@@ -289,6 +287,10 @@ export default function Home() {
                 <span>Estudos em Teologia</span>
               </div>
               <div data-chapter-item="fact-3">
+                <strong>CPAJ</strong>
+                <span>Mestranda em Teologia Filosófica</span>
+              </div>
+              <div data-chapter-item="fact-4">
                 <strong>02</strong>
                 <span>Obras identificadas</span>
               </div>
@@ -387,15 +389,18 @@ export default function Home() {
           </div>
 
           <div className="video-note reveal" data-reveal="soft">
-            <div className="play-icon" data-video-item="icon" aria-hidden="true">▶</div>
-            <div>
-              <p className="kicker" data-video-item="kicker">Acervo em construção</p>
-              <h3 data-video-item="title">Palestras em vídeo</h3>
-              <p data-video-item="copy">
-                Não localizamos, até julho de 2026, uma gravação pública
-                verificável de palestra individual de Sady Santana no YouTube.
-                Este espaço está preparado para receber o conteúdo oficial.
-              </p>
+            <div className="video-copy">
+              <p className="kicker" data-video-item="kicker">Palestras em vídeo</p>
+              <h3 data-video-item="title">Vídeo em destaque</h3>
+            </div>
+            <div className="video-frame" data-video-item="player">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/Engv2JRyjZc"
+                title="Vídeo em destaque de Sady Santana"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
             </div>
           </div>
         </section>
