@@ -31,33 +31,6 @@ const books = [
   },
 ];
 
-const themes = [
-  {
-    number: "01",
-    title: "Feminilidade à luz das Escrituras",
-    text: "Identidade, beleza, vocação e sabedoria feminina sob uma cosmovisão bíblica.",
-    verse: "“Enganosa é a graça, e vã, a formosura.” · Pv 31.30",
-  },
-  {
-    number: "02",
-    title: "Mulheres cristãs no mundo digital",
-    text: "Presença, modéstia e discernimento para comunicar a fé sem perder a essência.",
-    verse: "“Andai como filhos da luz.” · Ef 5.8",
-  },
-  {
-    number: "03",
-    title: "Família, cultura e formação dos filhos",
-    text: "Como cultivar uma casa firmada na aliança e formar afetos voltados para o Senhor.",
-    verse: "“Ensina a criança no caminho.” · Pv 22.6",
-  },
-  {
-    number: "04",
-    title: "Graça e redenção na literatura",
-    text: "Histórias como janelas para o coração humano e para a maior história de amor.",
-    verse: "“Tudo fez formoso no seu devido tempo.” · Ec 3.11",
-  },
-];
-
 function LeafMark({ light = false }) {
   return (
     <span className={`leaf-mark ${light ? "light" : ""}`} aria-hidden="true">
@@ -80,6 +53,7 @@ export default function Home() {
   const [requestedBook, setRequestedBook] = useState("vestido");
   const [bookPhase, setBookPhase] = useState("idle");
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [contactStatus, setContactStatus] = useState("");
   const tabRefs = useRef([]);
 
   useEffect(() => {
@@ -156,6 +130,15 @@ export default function Home() {
   }, []);
 
   const book = books.find((item) => item.id === activeBook);
+  const handleContactSubmit = (event) => {
+    event.preventDefault();
+    if (!event.currentTarget.reportValidity()) return;
+    const formData = new FormData(event.currentTarget);
+    const subject = "Convite pelo site — Sady Santana";
+    const body = `E-mail: ${formData.get("email")}\n\nCelular / WhatsApp: ${formData.get("phone")}\n\nMensagem:\n${formData.get("message")}`;
+    setContactStatus("Seu aplicativo de e-mail será aberto para concluir o envio.");
+    window.location.href = `mailto:sady287@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
 
   return (
     <>
@@ -186,7 +169,7 @@ export default function Home() {
           {[
             ["Sobre", "#sobre"],
             ["Livros", "#livros"],
-            ["Palestras", "#palestras"],
+            ["Vídeo", "#palestras"],
             ["Escritos", "#escritos"],
           ].map(([label, href]) => (
             <a key={href} href={href} onClick={() => setMenuOpen(false)}>
@@ -364,33 +347,9 @@ export default function Home() {
         </section>
 
         <section className="talks" id="palestras">
-          <div className="section-heading light reveal" data-reveal="soft">
-            <div>
-              <p className="section-index">03 · conversas & palestras</p>
-              <h2>Verdade que alcança<br />a vida real.</h2>
-            </div>
-            <p>
-              Temas recorrentes na produção pública da autora, adequados a
-              igrejas, conferências de mulheres e encontros de famílias.
-            </p>
-          </div>
-
-          <div className="theme-list">
-            {themes.map((theme, index) => (
-              <article className="theme reveal" data-delay={String(index + 1)} key={theme.number}>
-                <span>{theme.number}</span>
-                <div>
-                  <h3>{theme.title}</h3>
-                  <p>{theme.text}</p>
-                </div>
-                <small>{theme.verse}</small>
-              </article>
-            ))}
-          </div>
-
           <div className="video-note reveal" data-reveal="soft">
             <div className="video-copy">
-              <p className="kicker" data-video-item="kicker">Palestras em vídeo</p>
+              <p className="section-index" data-video-item="kicker">03 · vídeo em destaque</p>
               <h3 data-video-item="title">Vídeo em destaque</h3>
             </div>
             <div className="video-frame" data-video-item="player">
@@ -420,21 +379,26 @@ export default function Home() {
           </a>
         </section>
 
-        <section className="newsletter chapter reveal" data-chapter="closing" id="contato">
+        <section className="contact chapter reveal" data-chapter="closing" id="contato">
           <span data-closing-item="ornament"><LeafMark light /></span>
-          <div className="newsletter-copy">
-            <p className="kicker" data-closing-item="kicker">Cartas de Sady</p>
-            <h2 data-closing-item="title">Palavras de fé,<br />de tempos em tempos.</h2>
+          <div className="contact-copy">
+            <p className="kicker" data-closing-item="kicker">Convites & contato</p>
+            <h2 data-closing-item="title">Convide Sady para uma conversa.</h2>
             <p data-closing-item="copy">
-              Este formulário é uma demonstração interativa. Conecte uma
-              plataforma de e-mail para transformá-lo em uma lista real.
+              Para palestras, encontros, entrevistas e outros convites, envie
+              uma mensagem para Sady.
             </p>
           </div>
-          <div className="subscribe-form">
-            <p role="status" data-closing-item="status">A lista de e-mails será integrada em uma etapa futura.</p>
-            <a className="button newsletter-button" data-closing-item="cta" href="/artigos">Ler os artigos</a>
-            <small data-closing-item="note">Os artigos já podem ser lidos sem cadastro.</small>
-          </div>
+          <form className="contact-form" action="mailto:sady287@gmail.com" method="post" encType="text/plain" onSubmit={handleContactSubmit} data-closing-item="form">
+            <label htmlFor="contact-email">Seu e-mail</label>
+            <input id="contact-email" type="email" name="email" autoComplete="email" required />
+            <label htmlFor="contact-phone">Celular / WhatsApp</label>
+            <input id="contact-phone" type="tel" name="phone" autoComplete="tel" required />
+            <label htmlFor="contact-message">Mensagem</label>
+            <textarea id="contact-message" name="message" rows={5} required />
+            <button className="button contact-button" type="submit">Enviar convite</button>
+            <p className="contact-status" role="status" aria-live="polite">{contactStatus}</p>
+          </form>
         </section>
       </main>
 
@@ -447,13 +411,13 @@ export default function Home() {
           </span>
         </a>
         <p>
-          Site-conceito criado a partir de informações públicas. Conteúdo
-          biográfico sujeito à validação da autora.
+          Site desenvolvido pela Lumen Society.
         </p>
         <div>
           <a href="#sobre">Sobre</a>
           <a href="#livros">Livros</a>
-          <a href="#palestras">Palestras</a>
+          <a href="#palestras">Vídeo</a>
+          <a href="#contato">Convites</a>
           <a href="#inicio" aria-label="Voltar ao topo">↑</a>
         </div>
       </footer>

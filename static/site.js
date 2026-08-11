@@ -108,6 +108,20 @@ if (motionPreference.addEventListener) {
   });
 }
 
+const contactForm = document.querySelector(".contact-form");
+if (contactForm) {
+  contactForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!contactForm.reportValidity()) return;
+    const formData = new FormData(contactForm);
+    const subject = "Convite pelo site — Sady Santana";
+    const body = `E-mail: ${formData.get("email")}\n\nCelular / WhatsApp: ${formData.get("phone")}\n\nMensagem:\n${formData.get("message")}`;
+    const status = contactForm.querySelector(".contact-status");
+    status.textContent = "Seu aplicativo de e-mail será aberto para concluir o envio.";
+    window.location.href = `mailto:sady287@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+}
+
 const gardens = document.querySelectorAll(".corner-garden");
 let lastScroll = window.scrollY;
 let windTimer = null;
