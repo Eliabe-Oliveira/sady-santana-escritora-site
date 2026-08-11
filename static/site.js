@@ -18,8 +18,8 @@ const books = {
     meta: ["Feminilidade", "Cantares", "Vida cristã"],
     cover: window.BOOK_COVERS && window.BOOK_COVERS.feminilidade,
     coverAlt: "Capa do livro Feminilidade Bíblica, de Sady Santana Ferreira",
-    link: "https://goodprime.co/e-dai-o-malabarismo-hermeneutico-da-imprensa-para-desmoralizar-o-presidente/",
-    cta: "Ver referência"
+    link: "https://www.amazon.com.br/FEMINILIDADE-B%C3%8DBLICA-Repensando-mulher-Cantares-ebook/dp/B0D261ZZMM",
+    cta: "Conhecer o livro"
   }
 };
 const bookTabs = Array.from(document.querySelectorAll('.book-selector [role="tab"]'));
