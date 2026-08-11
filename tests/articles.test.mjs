@@ -111,6 +111,8 @@ scenario("mantém o catálogo na largura editorial completa", async () => {
   const css = await readFile("app/globals.css", "utf8");
   assert.match(css, /\.articles-library \{ width: min\(100%, 1480px\); padding: 110px 5vw;/);
   assert.match(css, /\.article-row h3 \{[^}]*font-size: clamp\(22px, 2\.1vw, 32px\)/);
+  assert.match(css, /\.article-row > div \{ min-width: 0; \}/);
+  assert.match(css, /\.article-row h3 \{[^}]*overflow-wrap: anywhere/);
 });
 
 scenario("define canonical e próxima página no acervo", async () => {
@@ -351,11 +353,42 @@ scenario("mantém as revisões editoriais da Home equivalentes em React e static
   }
   assert.match(app, /youtube-nocookie\.com\/embed\/Engv2JRyjZc/);
   assert.match(home, /youtube-nocookie\.com\/embed\/Engv2JRyjZc/);
+  for (const source of [app, home]) {
+    assert.equal((source.match(/03 · vídeo em destaque/g) || []).length, 1);
+    assert.doesNotMatch(source, /<h3[^>]*>Vídeo em destaque<\/h3>|data-video-item=["']title["']/);
+  }
   assert.match(home, /title="Vídeo em destaque de Sady Santana" loading="lazy"[\s\S]*allowfullscreen/);
   assert.match(css, /\.facts \{[^}]*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/);
   assert.match(css, /@media \(max-width: 900px\)[\s\S]*\.facts \{ grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(css, /\.video-frame \{[^}]*aspect-ratio: 16 \/ 9/);
+  assert.doesNotMatch(css, /\.video-note h3|data-video-item=["']title["']/);
   assert.match(home, /"description":"Escritora cristã presbiteriana,[^"]*CPAJ\."/);
+});
+
+scenario("gera o preview do acervo a partir do Sanity sem conteúdo legacy", async () => {
+  const [template, pagesBuild, workerBuild] = await Promise.all([
+    readFile("static/articles.html", "utf8"),
+    readFile("build-pages.mjs", "utf8"),
+    readFile("build.mjs", "utf8"),
+  ]);
+  for (const legacy of [
+    "Mulher & cultura digital",
+    "Da vida “sem véu” à exposição “sem filtro”",
+    "Você está preparando seu filho para o que vem a seguir?",
+    "primeiraigrejavirtual.com.br",
+    "goodprime.co",
+  ]) assert.doesNotMatch(template, new RegExp(legacy));
+  assert.match(template, /__ARTICLE_LIST__/);
+  assert.match(pagesBuild, /zwhnxf2h/);
+  assert.match(pagesBuild, /2025-02-19/);
+  assert.match(pagesBuild, /!\(_id in path\("drafts\.\*\*"\)\)/);
+  assert.match(pagesBuild, /status == "published"/);
+  assert.match(pagesBuild, /dateTime\(publishedAt\) <= dateTime\(now\(\)\)/);
+  assert.match(pagesBuild, /officialArticlesUrl[^\n]*\/artigos/);
+  assert.match(pagesBuild, /O acervo atualizado está disponível no site oficial\./);
+  assert.doesNotMatch(pagesBuild, /SANITY_READ_TOKEN|SANITY_PREVIEW_SECRET|navigator\.userAgent|headers\.get\(["']user-agent|innerWidth|matchMedia/i);
+  assert.match(workerBuild, /async function archivePage[\s\S]*sanity\(env/);
+  assert.doesNotMatch(workerBuild, /navigator\.userAgent|headers\.get\(["']user-agent|innerWidth|matchMedia/i);
 });
 
 scenario("aplica a coreografia editorial ao acervo sem layout shift", async () => {
