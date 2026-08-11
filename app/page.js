@@ -350,7 +350,6 @@ export default function Home() {
           <div className="video-note reveal" data-reveal="soft">
             <div className="video-copy">
               <p className="section-index" data-video-item="kicker">03 · vídeo em destaque</p>
-              <h3 data-video-item="title">Vídeo em destaque</h3>
             </div>
             <div className="video-frame" data-video-item="player">
               <iframe
