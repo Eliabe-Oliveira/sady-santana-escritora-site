@@ -24,7 +24,7 @@ Acesse `http://localhost:3333`.
 Cadastre em **Manage project > API > CORS origins**:
 
 - `http://localhost:3333` com credenciais;
-- `https://sady-santana-escritora.elufurtado.chatgpt.site` sem credenciais para leitura pública.
+- `https://escritorasady.com.br` sem credenciais para leitura pública.
 
 No ambiente de hospedagem do site, configure `PUBLIC_SANITY_PROJECT_ID`, `PUBLIC_SANITY_DATASET=production`, `SANITY_API_VERSION=2025-02-19` e `PUBLIC_SITE_URL` com a URL canônica. Nenhum token é necessário para o site público.
 

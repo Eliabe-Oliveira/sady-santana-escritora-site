@@ -3,7 +3,7 @@ export const dynamic = "force-static";
 export default function sitemap() {
   return [
     {
-      url: "https://sady-santana-escritora.elufurtado.chatgpt.site",
+      url: "https://escritorasady.com.br",
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,

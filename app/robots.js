@@ -6,6 +6,6 @@ export default function robots() {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://sady-santana-escritora.elufurtado.chatgpt.site/sitemap.xml",
+    sitemap: "https://escritorasady.com.br/sitemap.xml",
   };
 }
