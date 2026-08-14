@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  metadataBase: new URL("https://sady-santana-escritora.elufurtado.chatgpt.site"),
+  metadataBase: new URL("https://escritorasady.com.br"),
   alternates: {
     canonical: "/",
   },

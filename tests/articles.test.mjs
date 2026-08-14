@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import {readFile} from "node:fs/promises";
+import {Readable} from "node:stream";
 import worker from "../dist/server/index.js";
+import {vercelHandler} from "../api/index.mjs";
 import {isPublicArticle, publicArticles, readingMinutes, paginate, slugify} from "../lib/articles.mjs";
 import {firstPublishedSlugFor, slugLockPatch, validatePermanentSlug} from "../sanity/schemaTypes/slugProtection.js";
 
@@ -10,6 +12,12 @@ const env = {
   SANITY_API_VERSION: "2025-02-19",
   PUBLIC_SITE_URL: "https://example.test",
 };
+Object.assign(process.env, {
+  PUBLIC_SANITY_PROJECT_ID: "test-project",
+  PUBLIC_SANITY_DATASET: "production",
+  SANITY_API_VERSION: "2025-02-19",
+  PUBLIC_SITE_URL: "https://escritorasady.com.br",
+});
 const block = (text, extra = {}) => ({_type: "block", style: "normal", markDefs: [], children: [{_type: "span", text, marks: []}], ...extra});
 const valid = {
   _id: "article-valid", title: "Artigo publicado", slug: "artigo-publicado", summary: "Resumo aprovado",
@@ -24,6 +32,21 @@ globalThis.fetch = async () => {
 const request = async (path) => {
   const response = await worker.fetch(new Request(`https://example.test${path}`), env);
   return {response, body: await response.text()};
+};
+const vercelRequest = async (path, options = {}) => {
+  const incoming = Readable.from(options.body ? [options.body] : []);
+  incoming.method = options.method || "GET";
+  incoming.url = path;
+  incoming.headers = {host: "preview.vercel.app", "x-forwarded-proto": "https", ...(options.headers || {})};
+  const headers = new Map();
+  let responseBody;
+  const outgoing = {
+    statusCode: 200,
+    setHeader(name, value) { headers.set(name.toLowerCase(), String(value)); },
+    end(value = "") { responseBody = Buffer.isBuffer(value) ? value : Buffer.from(value); },
+  };
+  await vercelHandler(incoming, outgoing);
+  return {status: outgoing.statusCode, headers, body: responseBody.toString("utf8")};
 };
 const withoutErrorNoise = async (callback) => {
   const original = console.error;
@@ -450,6 +473,67 @@ scenario("preserva estados HTTP, SEO e filtros server-side com o runtime comum",
   failure = new Error("offline");
   assert.equal((await withoutErrorNoise(() => request("/artigos"))).response.status, 503);
   failure = null;
+});
+
+scenario("adapter Vercel preserva Home, headers e canonical de produção", async () => {
+  const page = await vercelRequest("/");
+  assert.equal(page.status, 200);
+  assert.match(page.headers.get("content-type"), /text\/html/);
+  assert.equal(page.headers.get("cache-control"), "public, max-age=60, stale-while-revalidate=300");
+  assert.match(page.body, /<link rel="canonical" href="https:\/\/escritorasady\.com\.br\/">/);
+  assert.doesNotMatch(page.body, /chatgpt\.site|vercel\.app/);
+});
+
+scenario("adapter Vercel preserva query string de busca e categoria", async () => {
+  result = [valid]; failure = null;
+  const page = await vercelRequest("/artigos?q=publicado&categoria=F%C3%A9");
+  assert.equal(page.status, 200);
+  assert.match(page.body, /value="publicado"/);
+  assert.match(page.body, /selected value="Fé"/);
+  assert.match(page.body, /name="robots" content="noindex,follow"/);
+});
+
+scenario("adapter Vercel abre artigo de referência e mantém SEO", async () => {
+  result = {...valid, title: "O TESTE DA HOSPITALIDADE", slug: "o-teste-da-hospitalidade-um-chamado-ao-amor-e-a-fe"};
+  const page = await vercelRequest("/artigos/o-teste-da-hospitalidade-um-chamado-ao-amor-e-a-fe");
+  assert.equal(page.status, 200);
+  assert.match(page.body, /O TESTE DA HOSPITALIDADE/);
+  assert.match(page.body, /"@type":"BlogPosting"/);
+  assert.match(page.body, /https:\/\/escritorasady\.com\.br\/artigos\/o-teste-da-hospitalidade-um-chamado-ao-amor-e-a-fe/);
+});
+
+scenario("adapter Vercel preserva 404 real", async () => {
+  result = null; failure = null;
+  const page = await vercelRequest("/artigos/slug-inexistente-vercel-qa");
+  assert.equal(page.status, 404);
+  assert.match(page.body, /Este artigo não foi encontrado/);
+  assert.match(page.body, /Site desenvolvido pela Lumen Society\./);
+});
+
+scenario("adapter Vercel preserva 503, Retry-After e no-store", async () => {
+  failure = new Error("offline");
+  const page = await withoutErrorNoise(() => vercelRequest("/artigos"));
+  assert.equal(page.status, 503);
+  assert.equal(page.headers.get("retry-after"), "60");
+  assert.equal(page.headers.get("cache-control"), "no-store");
+  assert.match(page.body, /Site desenvolvido pela Lumen Society\./);
+  failure = null;
+});
+
+scenario("adapter Vercel serve sitemap e robots no domínio definitivo", async () => {
+  result = [{slug: "o-teste-da-hospitalidade-um-chamado-ao-amor-e-a-fe", publishedAt: valid.publishedAt}];
+  const [sitemap, robots] = await Promise.all([vercelRequest("/sitemap.xml"), vercelRequest("/robots.txt")]);
+  assert.equal(sitemap.status, 200);
+  assert.match(sitemap.body, /https:\/\/escritorasady\.com\.br\/artigos\/o-teste-da-hospitalidade-um-chamado-ao-amor-e-a-fe/);
+  assert.equal(robots.status, 200);
+  assert.match(robots.body, /Sitemap: https:\/\/escritorasady\.com\.br\/sitemap\.xml/);
+});
+
+scenario("adapter Vercel usa Sanity público sem token", async () => {
+  const source = await readFile("api/index.mjs", "utf8");
+  const build = await readFile("build.mjs", "utf8");
+  assert.doesNotMatch(`${source}\n${build}`, /SANITY_READ_TOKEN|SANITY_PREVIEW_SECRET|Authorization|Bearer/);
+  assert.doesNotMatch(build, /\bcf\s*:/);
 });
 
 for (const {name, run} of scenarios) {

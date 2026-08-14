@@ -25,7 +25,7 @@ const HOME=${JSON.stringify(home)};
 const ARCHIVE=${JSON.stringify(archive)};
 const CSS=${JSON.stringify(css)};
 const EDITORIAL_SCRIPT=${JSON.stringify(editorialJs)};
-const SITE_DEFAULT="https://sady-santana-escritora.elufurtado.chatgpt.site";
+const SITE_DEFAULT="https://escritorasady.com.br";
 const PAGE_SIZE=8;
 const E=${esc.toString()};
 const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store"}});
@@ -43,7 +43,7 @@ async function sanity(env,query){
   if(!project)throw new Error("Sanity project is not configured");
   const endpoint="https://"+project+".api.sanity.io/v"+version+"/data/query/"+encodeURIComponent(dataset)+"?query="+encodeURIComponent(query);
   const controller=new AbortController(), timeout=setTimeout(()=>controller.abort(),8000);
-  let response;try{response=await fetch(endpoint,{headers:{accept:"application/json"},signal:controller.signal,cf:{cacheTtl:60,cacheEverything:true}})}finally{clearTimeout(timeout)}
+  let response;try{response=await fetch(endpoint,{headers:{accept:"application/json"},signal:controller.signal})}finally{clearTimeout(timeout)}
   if(!response.ok)throw new Error("Sanity "+response.status);
   const payload=await response.json();if(!payload||!("result" in payload))throw new Error("Invalid Sanity response");return payload.result;
 }
@@ -101,7 +101,7 @@ const EDITORIAL_CSS=${JSON.stringify(`
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 `)};
 async function sitemap(env,site){const articles=await sanity(env,'*[_type == "article" && '+publicFilter+'] | order(publishedAt desc) {"slug":slug.current,updatedAt,publishedAt}');if(!Array.isArray(articles))throw new Error("Invalid sitemap collection");return '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/sitemap/0.9"><url><loc>'+site+'/</loc></url><url><loc>'+site+'/artigos</loc></url>'+articles.map(a=>'<url><loc>'+site+'/artigos/'+E(a.slug)+'</loc><lastmod>'+E(a.updatedAt||a.publishedAt)+'</lastmod></url>').join("")+'</urlset>'}
-export default {async fetch(request,env){const url=new URL(request.url),site=env.PUBLIC_SITE_URL||SITE_DEFAULT;
+export async function handleRequest(request,env={}){const url=new URL(request.url),site=env.PUBLIC_SITE_URL||SITE_DEFAULT;
   if(url.pathname==="/robots.txt")return new Response("User-agent: *\\nAllow: /\\nSitemap: "+site+"/sitemap.xml\\n",{headers:{"content-type":"text/plain"}});
   if(url.pathname==="/sitemap.xml"){try{return new Response(await sitemap(env,site),{headers:{"content-type":"application/xml","cache-control":"public, max-age=300"}})}catch(error){reportSanityFailure("sitemap",error);return new Response("Sitemap temporariamente indisponível. Volte para "+site+"/",{status:503,headers:{"content-type":"text/plain; charset=utf-8","cache-control":"no-store","retry-after":"60"}})}}
   if(url.pathname==="/api/inscrever"&&request.method==="POST"){let body;try{body=await request.json()}catch{return json({error:"Dados inválidos."},400)}const email=String(body.email||"").trim().toLowerCase();if(body.company)return json({ok:true});if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email))return json({error:"Informe um e-mail válido."},400);if(!body.consent)return json({error:"É necessário aceitar o envio dos avisos."},400);return json({error:"A lista de artigos ainda será integrada em uma etapa futura.",code:"CONFIG_PENDING"},503)}
@@ -109,7 +109,8 @@ export default {async fetch(request,env){const url=new URL(request.url),site=env
   const page=url.pathname.match(/^\\/artigos\\/pagina\\/(\\d+)\\/?$/);if(page)return archivePage(url,env,Number(page[1]));
   const article=url.pathname.match(/^\\/artigos\\/([^/]+)\\/?$/);if(article)return articlePage(decodeURIComponent(article[1]),env,url);
   if(url.pathname!=="/")return html("Página não encontrada",404);return html(HOME);
-}};`;
+}
+export default {fetch:handleRequest};`;
   await fs.mkdir("dist/server", {recursive:true}); await fs.mkdir("dist/.openai", {recursive:true});
   await fs.writeFile("dist/server/index.js", worker); await fs.writeFile("dist/.openai/hosting.json", hosting);
 }

@@ -3,7 +3,7 @@ import https from "https";
 
 const base = "/sady-santana-escritora-site";
 const publicUrl = "https://eliabe-oliveira.github.io/sady-santana-escritora-site";
-const officialArticlesUrl = "https://sady-santana-escritora.elufurtado.chatgpt.site/artigos";
+const officialArticlesUrl = "https://escritorasady.com.br/artigos";
 const sanityProject = "zwhnxf2h";
 const sanityDataset = "production";
 const sanityApiVersion = "2025-02-19";
@@ -78,12 +78,12 @@ function pageLinks(html) {
   result = replaceAll(result, 'href="/"', `href="${base}/"`);
   result = replaceAll(
       result,
-      "https://sady-santana-escritora.elufurtado.chatgpt.site/artigos",
+      "https://escritorasady.com.br/artigos",
       `${publicUrl}/artigos/`,
     );
   return replaceAll(
       result,
-      "https://sady-santana-escritora.elufurtado.chatgpt.site/",
+      "https://escritorasady.com.br/",
       `${publicUrl}/`,
     );
 }
@@ -103,7 +103,7 @@ async function buildPages() {
   ]);
   const pagesJs = js.replace(
     'fetch("/api/inscrever"',
-    'fetch("https://sady-santana-escritora.elufurtado.chatgpt.site/api/inscrever"',
+    'fetch("https://escritorasady.com.br/api/inscrever"',
   );
 
   const home = pageLinks(homeTemplate)
